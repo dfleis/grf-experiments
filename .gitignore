@@ -2,13 +2,13 @@
 .Rproj.user
 .Rhistory
 
-*.pdf
-*.csv
-*.rdata
-
 # directories
 old/scrap/
 figures/
 
 data/*
 !data/
+
+*.pdf
+*.csv
+*.rdata
