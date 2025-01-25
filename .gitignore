@@ -6,9 +6,4 @@
 old/scrap/
 figures/
 
-data/*
-!data/
-
 *.pdf
-*.csv
-*.rdata
