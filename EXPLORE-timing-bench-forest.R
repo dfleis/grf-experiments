@@ -114,12 +114,12 @@ sigma_eps <- 1 # response/outcome noise
 
 # Algorithm/model params
 methods <- c("grad", "fpt1", "fpt2")
-num_trees <- 1
+num_trees <- 50
 min_node_size <- 5
 num_threads <- 5
 
 # Data params
-Kvals <- rev(c(2, 4, 8, 16, 32, 64, 128, 256, 512, 1024))
+Kvals <- rev(c(2, 4, 8, 16, 32, 64, 128))
 pvals <- 1
 nvals <- 10000
 
