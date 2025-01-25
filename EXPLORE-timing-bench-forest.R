@@ -114,12 +114,12 @@ sigma_eps <- 1 # response/outcome noise
 
 # Algorithm/model params
 methods <- c("grad", "fpt1", "fpt2")
-num_trees <- 50
+num_trees <- 10
 min_node_size <- 5
-num_threads <- 5
+num_threads <- 10
 
 # Data params
-Kvals <- rev(c(2, 4, 8, 16, 32, 64, 128))
+Kvals <- rev(c(2, 4, 8, 16, 32, 64, 128, 256, 512))
 pvals <- 1
 nvals <- 10000
 
@@ -174,14 +174,7 @@ for (i in 1:nrow(par_grid)) {
                               num.trees = nt, min.node.size = mns))
   make_args <- function(mm) modifyList(args_grf, list(method = mm))
   
-  # bt_times <- sapply(methods, function(method) {
-  #   gc()
-  #   bt <- bench::bench_time(do.call(grf::lm_forest, make_args(method)))
-  #   return (bt)
-  # })
-  # 
   gc()
-  
   bp <- bench::press(
     method = methods,
     {
@@ -213,7 +206,9 @@ df_wide <- df_times %>%
   mutate(fpt1_FACTOR = as.numeric(grad)/as.numeric(fpt1),
          fpt2_FACTOR = as.numeric(grad)/as.numeric(fpt2))
 
-write.csv(df_wide, file = "data/EXPLORE-timing-bench-lm.csv", row.names = FALSE)
+datetime <- format(Sys.time(), format = "%Y%m%d-%H%M")
+filename <- sprintf("data/EXPLORE-timing-bench-%s.csv", datetime)
+write.csv(df_wide, file = filename, row.names = FALSE)
 
 cat("Total elapsed time:", format(difftime(t1, t0), digits = 6), "\n")
 
