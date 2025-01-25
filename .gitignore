@@ -9,4 +9,6 @@
 # directories
 old/scrap/
 figures/
+
 data/*
+!data/
