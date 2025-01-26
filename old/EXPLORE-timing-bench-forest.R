@@ -131,13 +131,13 @@ args_grf_global <- list(
 methods <- c("grad", "fpt1", "fpt2")
 #num_trees <- rev(seq(100, 1000, by = 100))
 #min_node_size <- 5*2^(0:7)#seq(10, 20, by = 10)
-num_trees <- 1
+num_trees <- 2
 min_node_size <- 5
 
 # Data params
-Kvals <- rev(c(2, 4, 8, 16, 32, 64, 128, 256))
+Kvals <- rev(c(32))
 pvals <- 1#c(1, 5)
-nvals <- 20000 #c(2500, 10000)
+nvals <- 2500 #c(2500, 10000)
 
 
 # Parameter grid
