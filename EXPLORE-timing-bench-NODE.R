@@ -119,9 +119,9 @@ min_node_size <- 5
 num_threads <- NULL
 
 # Data params
-Kvals <- rev(c(2, 4, 8, 16, 32, 64, 128, 256, 512))
+Kvals <- rev(c(200))
 pvals <- 1
-nvals <- 10000
+nvals <- 20000
 
 # Global arguments
 args_grf_global <- list(

@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Slurm parameters
-MEMO=100G		# memory allocation
+MEMO=250G		# memory allocation
 TIME=0-01:00:00		# time allocation
-CORE=50			# core allocation
+CORE=2			# core allocation
 
 CHDIR=/home/yyang/scratch/grf-experiments
 
@@ -15,8 +15,8 @@ LOGS=logs
 mkdir -p $LOGS
 
 # Assemble components for the slurm order for this job
-JOBN="bench_forest"
-SCRIPT="bench-forest.sh"
+JOBN="bench_K"
+SCRIPT="bench-K.sh"
 
 OUTF=$LOGS"/"$JOBN".out"
 ERRF=$LOGS"/"$JOBN".err"

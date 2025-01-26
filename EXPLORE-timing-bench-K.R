@@ -114,14 +114,14 @@ sigma_eps <- 1 # response/outcome noise
 
 # Algorithm/model params
 methods <- c("grad", "fpt1", "fpt2")
-num_trees <- 50
+num_trees <- 1
 min_node_size <- 5
 num_threads <- NULL
 
 # Data params
-Kvals <- rev(c(2, 4, 8, 16, 32, 64, 128, 256, 512))
+Kvals <- rev(c(500, 1000))
 pvals <- 1
-nvals <- 10000
+nvals <- 50000
 
 # Global arguments
 args_grf_global <- list(
