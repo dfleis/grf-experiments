@@ -270,6 +270,7 @@ create_treatment_probs_type2 <- function(x, K) {
   cbind(x[,1], replicate(K - 1, 1 - x[,1])/(K - 1))
 }
 create_treatment_probs_type3 <- function(x, K) {
+  p <- ncol(x)
   gamma <- matrix(rnorm(K * p), nrow = K, ncol = p)
   expXgamma <- exp(x %*% t(gamma))
   expXgamma/rowSums(expXgamma)
