@@ -25,13 +25,14 @@ prob_type <- validate_prob_type(model_type, setting_id)
 seed <- 1
 
 # Algorithm/model params
-methods <- c("grad", "fpt1", "fpt2")
-num_trees <- c(1, 50, 100)
+#methods <- c("grad", "fpt1", "fpt2")
+methods <- c("grad", "fpt2")
+num_trees <- c(1, 10)
 
 # Data params
-Kvals <- c(4)#16, 4)#c(256, 64, 16, 4)
-pvals <- 2
-nvals <- c(5000, 20000)
+Kvals <- c(6, 4)#16, 4)#c(256, 64, 16, 4)
+pvals <- 5
+nvals <- c(5000, 7500)
 
 # Global GRF arguments
 args_grf_global <- list(
@@ -178,13 +179,14 @@ t1 <- Sys.time()
 #--------------------------------------------------
 #----- SAVE DATA
 #--------------------------------------------------
-df_times <- bind_rows(sim_times) 
+df_times <- bind_rows(sim_times) %>%
+	mutate(median = as.numeric(median))
 df_times_wide <- df_times %>%
   pivot_wider(
     names_from = method, 
     values_from = median
   ) %>%
-  mutate(fpt1_FACTOR = as.numeric(grad)/as.numeric(fpt1),
+  mutate(#fpt1_FACTOR = as.numeric(grad)/as.numeric(fpt1),
          fpt2_FACTOR = as.numeric(grad)/as.numeric(fpt2))
 
 datetime <- format(Sys.time(), format = "%Y%m%d-%H%M")
