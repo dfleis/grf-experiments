@@ -1,7 +1,7 @@
 suppressMessages(library(tidyverse))
 suppressMessages(library(bench))
 library(grf)
-source("new/utils-data.R")
+source("utils-data.R")
 
 BENCH_QUIET <- TRUE
 NUM_THREADS <- NULL
