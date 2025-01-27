@@ -27,12 +27,12 @@ seed <- 1
 # Algorithm/model params
 #methods <- c("grad", "fpt1", "fpt2")
 methods <- c("grad", "fpt2")
-num_trees <- c(1, 10)
+num_trees <- c(1, 50, 100)
 
 # Data params
-Kvals <- c(6, 4)#16, 4)#c(256, 64, 16, 4)
+Kvals <- c(256, 64, 16, 4)
 pvals <- 5
-nvals <- c(5000, 7500)
+nvals <- c(5000, 20000)
 
 # Global GRF arguments
 args_grf_global <- list(
