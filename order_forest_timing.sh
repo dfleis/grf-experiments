@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Slurm parameters
-MEMO=200G       # memory allocation
+MEMO=240G       # memory allocation
 TIME=0-16:00:00 # time allocation
 CORE=1          # core allocation
 

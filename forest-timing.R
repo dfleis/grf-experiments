@@ -4,7 +4,7 @@ library(grf)
 source("utils-data.R")
 
 BENCH_QUIET <- TRUE
-NUM_THREADS <- NULL
+NUM_THREADS <- 1
 FILENAME_HEAD <- "data/forest-timing"
 
 args <- commandArgs(TRUE)
