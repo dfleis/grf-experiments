@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Slurm parameters
-MEMO=240G       # memory allocation
-TIME=0-16:00:00 # time allocation
+MEMO=120G       # memory allocation
+TIME=0-10:00:00 # time allocation
 CORE=1          # core allocation
 
 CHDIR=/home/yyang/scratch/grf-experiments
