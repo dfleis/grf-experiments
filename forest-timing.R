@@ -32,7 +32,7 @@ num_trees <- c(1, 50, 100)
 # Data params
 Kvals <- c(256, 64, 16, 4)
 pvals <- 5
-nvals <- c(5000, 20000)
+nvals <- c(10000, 20000)
 
 # Global GRF arguments
 args_grf_global <- list(
