@@ -2,6 +2,7 @@ suppressMessages(library(tidyverse))
 suppressMessages(library(bench))
 library(grf)
 source("utils-data.R")
+source("utils-forest.R")
 
 BENCH_QUIET <- TRUE
 NUM_THREADS <- 1
@@ -10,14 +11,13 @@ FILENAME_HEAD <- "data/forest-timing"
 args <- commandArgs(TRUE)
 model_type <- args[1] # "vcm" or "hte"
 setting_id <- args[2] # "1", "2", "3", "4", "5"
-# model_type <- "hte"
-# setting_id <- "5"
+##model_type <- "hte"
+##setting_id <- "5"
 
 stopifnot(model_type %in% c("vcm", "hte"))
 stopifnot(setting_id %in% c("1", "2", "3", "4", "5"))
 
-effect_type <- validate_effect_type(model_type, setting_id)
-prob_type <- validate_prob_type(model_type, setting_id)
+settings <- validate_setting(model_type = model_type, setting_id = setting_id)
 
 #--------------------------------------------------
 #----- DATA/FOREST SETTINGS
@@ -58,48 +58,6 @@ args_grf_global <- list(
 # studying the forest fit times and not CI coverage.
 
 #--------------------------------------------------
-#----- HELPERS/WRAPPERS
-#--------------------------------------------------
-center_forests <- function(data, model_type, 
-                           disable_centering = FALSE, 
-                           num_trees = 2000, min_node_size = 5, ...) {
-  # Robinson-style centering step to produce centered Y - Ybar and W - Wbar.
-  # This is the default mechanism that underlies grf::lm_forest. We want to
-  # use the same centered Y and W matrices across all methods since FPT does
-  # not affect this step, and we're only interested in comparing the differences 
-  # between FPT and grad
-  
-  num_trees_centering <- max(50, round(num_trees/4))
-  with(data, {
-    forest_Y <- grf::multi_regression_forest(X = X, Y = Y, 
-                                             num.trees = num_trees_centering,
-                                             min.node.size = min_node_size, 
-                                             compute.oob.predictions = TRUE, ...)
-    
-    forest_W <- if (model_type == "vcm") {
-      grf::multi_regression_forest(X = X, Y = W, 
-                                   num.trees = num_trees_centering, 
-                                   min.node.size = min_node_size, 
-                                   compute.oob.predictions = TRUE, ...)
-    } else { # hte
-      grf::probability_forest(X = X, Y = W, 
-                              num.trees = num_trees_centering,
-                              min.node.size = min_node_size,
-                              compute.oob.predictions = TRUE, ...)
-    }
-
-    Y_hat <- predict(forest_Y)$predictions
-    W_hat <- predict(forest_W)$predictions
-    
-    if (isTRUE(disable_centering)) {
-      Y_hat <- 0 * Y_hat
-      W_hat <- 0 * W_hat
-    }
-    return (list(Y_hat = Y_hat, W_hat = W_hat))
-  })
-}
-
-#--------------------------------------------------
 #----- SIMULATIONS
 #--------------------------------------------------
 set.seed(seed)
@@ -120,8 +78,10 @@ for (i in 1:nrow(par_grid)) {
       paste(names(pars), pars, sep = " = ", collapse = ", "), "\n")
   
   # Generate data
-  data_train <- generate_data(n = n, p = p, K = K, model_type = model_type,
-                              effect_type = effect_type, prob_type = prob_type)
+  data_train <- generate_data(n = n, p = p, K = K, 
+                              model_type = settings$model_type,
+                              effect_type = settings$effect_type, 
+                              prob_type = settings$prob_type)
 
   if (nt == 1) {
     disable_centering <- TRUE
@@ -167,10 +127,10 @@ for (i in 1:nrow(par_grid)) {
     select(method, median) %>%
     mutate(K = K, p = p, n = n, 
            nt = nt,
-           model_type = model_type,
-           setting_id = setting_id,
-           effect_type = effect_type,
-           prob_type = prob_type,
+           model_type = settings$model_type,
+           setting_id = settings$setting_id,
+           effect_type = settings$effect_type,
+           prob_type = settings$prob_type,
            FUN = FUN_grf$name)
   rm(bp)
 }

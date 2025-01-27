@@ -6,49 +6,83 @@ GLOBAL_TYPES_ENV$MODEL_TYPES <- c("hte", "vcm")
 lockEnvironment(GLOBAL_TYPES_ENV, bindings = TRUE)
 .get_model_types <- function() GLOBAL_TYPES_ENV$MODEL_TYPES
 
-
 validate_model_type <- function(model_type) {
   match.arg(model_type, .get_model_types())
 }
 
-validate_prob_type <- function(model_type, setting_id) {
-  prob_type <- if (model_type == "vcm") {
-    NA
-  } else { # HTE
-    stopifnot(setting_id %in% c("1", "2", "3", "4", "5"))
-    if (setting_id %in% c("1", "3")) { # uniform
-      1
-    } else if (setting_id %in% c("2", "4")) { # x1, (1 - x1)/(K - 1)
-      2
-    } else if (setting_id %in% c("5")) { # softmax
-      3
-    } else {
-      stop("Invalid 'setting_id' found when setting prob_type for model_type 'hte': 'setting_id' must be in 1 - 5.")
-    }
-  }
-  return (prob_type)
+validate_setting <- function(model_type, setting_id) {
+  # HTE Setting ID: Treatment effect function ID, treatment probability ID.
+  #   HTE 1: 1, 1
+  #   HTE 2: 1, 2
+  #   HTE 3: 2, 1
+  #   HTE 4: 3, 2
+  #   HTE 5: 4, 3
+  # VCM Setting ID: Effect function ID
+  #   VCM 1: 1
+  #   VCM 2: 2
+  #   VCM 3: 3
+  #   VCM 4: 4
+  model_type <- validate_model_type(model_type)
+  
+  effect_type <- validate_effect_type(model_type = model_type, setting_id = setting_id)
+  prob_type <- validate_prob_type(model_type = model_type, setting_id = setting_id)
+  
+  list(model_type = model_type, 
+       setting_id = setting_id, 
+       effect_type = effect_type, 
+       prob_type = prob_type)
 }
 
 validate_effect_type <- function(model_type, setting_id) {
   model_type <- validate_model_type(model_type)
-  effect_type <- if (model_type == "vcm") {
-    stopifnot(setting_id %in% c("1", "2", "3", "4"))
-    as.numeric(setting_id)
-  } else { # HTE
-    stopifnot(setting_id %in% c("1", "2", "3", "4", "5"))
-    if (setting_id %in% c("1", "2")) { # beta_{k1} x_1
-      1
-    } else if (setting_id == "3") { # varsigma(beta_{k1} x_1) varsigma(beta_{k2} x_2)
-      2
-    } else if (setting_id == "4") { # varsigma(beta_k^T x)
-      3
-    } else if (setting_id == "5") { # RFG
-      4
-    } else {
-      stop("Invalid 'setting_id' found when setting effect_type for model_type 'hte': 'setting_id' must be in 1 - 5.")
-    }
-  }
+  
+  effect_type <- switch(
+    model_type,
+    "vcm" = { 
+      if (setting_id %in% c("1", "2", "3", "4")) {
+        as.integer(setting_id)
+      } else {
+        stop("Invalid setting_id for model_type \"vcm\". Found setting_id = ", 
+             setting_id, ", but expected one of 1, 2, 3, 4.")
+      }
+    },
+    "hte" = {
+      switch(
+        setting_id,
+        "1" = 1,
+        "2" = 1,
+        "3" = 2,
+        "4" = 3,
+        "5" = 4,
+        stop("Invalid setting_id for model_type \"hte\". Found setting_id = ", 
+             setting_id, ", but expected one of 1, 2, 3, 4, 5.")
+      )
+    },
+    stop("Invalid model_type. Found ", model_type, ", but expected one of \"vcm\" or \"hte\".")
+  )
   return (effect_type)
+}
+validate_prob_type <- function(model_type, setting_id) {
+  model_type <- validate_model_type(model_type)
+  
+  prob_type <- switch(
+    model_type,
+    "vcm" = NA,
+    "hte" = {
+      switch(
+        setting_id,
+        "1" = 1,
+        "2" = 2,
+        "3" = 1,
+        "4" = 2,
+        "5" = 3,
+        stop("Invalid setting_id for model_type \"hte\". Found setting_id = ", 
+             setting_id, ", but expected one of 1, 2, 3, 4, 5.")
+      )
+    },
+    stop("Invalid model_type. Found ", model_type, ", but expected one of \"vcm\" or \"hte\".")
+  )
+  return (prob_type)
 }
 
 get_FUN_grf <- function(model_type) {
