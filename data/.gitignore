@@ -8,5 +8,5 @@
 !forest-timing-*.csv
 !forest-mse-*.csv
 
-!old/forest-timing
-!old/forest-mse
+!forest-timing
+!forest-mse
