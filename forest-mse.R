@@ -3,14 +3,15 @@ library(grf)
 source("utils-data.R")
 source("utils-forest.R")
 
-NUM_THREADS <- 6
+NUM_THREADS <- NULL # num.threads in grf::lm_forest and grf::multi_arm_causal_forest
+
 FILENAME_HEAD <- "data/forest-mse"
 
 args <- commandArgs(TRUE)
-# model_type <- args[1] # "vcm" or "hte"
-# setting_id <- args[2] # "1", "2", "3", "4", "5"
-model_type <- "vcm"
-setting_id <- "1"
+model_type <- args[1] # "vcm" or "hte"
+setting_id <- args[2] # "1", "2", "3", "4", "5"
+##model_type <- "vcm"
+##setting_id <- "1"
 
 stopifnot(model_type %in% c("vcm", "hte"))
 stopifnot(setting_id %in% c("1", "2", "3", "4", "5"))
@@ -21,18 +22,18 @@ settings <- validate_setting(model_type = model_type, setting_id = setting_id)
 #----- DATA/FOREST SETTINGS
 #--------------------------------------------------
 seed <- 1
-mse_nreps <- 10
+mse_nreps <- 50
 
 # Algorithm/model params
 #methods <- c("grad", "fpt1", "fpt2")
 methods <- c("grad", "fpt2")
-num_trees <- 10
+num_trees <- 100
 
 # Data params
-Kvals <- 4
-pvals <- 2
-nvals <- 2500
-n_test <- 1000
+Kvals <- 256
+pvals <- 5
+nvals <- 20000
+n_test <- 5000
 
 # Global GRF arguments
 args_grf_global <- list(
@@ -78,6 +79,7 @@ for (i in 1:nrow(par_grid)) {
       paste(names(pars), pars, sep = " = ", collapse = ", "), "\n")
   
   df_list <- lapply(1:mse_nreps, function(repid) {
+    cat(format(Sys.time()), ":: repid =", repid, "\n")
     # Generate data
     data_train <- generate_data(n = n, p = p, K = K, 
                                 model_type = settings$model_type,
@@ -85,7 +87,7 @@ for (i in 1:nrow(par_grid)) {
                                 prob_type = settings$prob_type)
     X_test <- generate_X(n_test, p)
     thetaX_test <- data_train$theta(X_test)
-    
+
     # Common centering step as per the recommendations of grf::lm_forest and grf::multi_arm_causal_forest
     centered <- center_forests(data = data_train, 
                                model_type = model_type,
@@ -93,7 +95,7 @@ for (i in 1:nrow(par_grid)) {
                                min_node_size = args_grf_global$min.node.size, 
                                num.threads = args_grf_global$num.threads,
                                seed = args_grf_global$seed)   
-    
+   
     args_grf <- modifyList(args_grf_global, 
                            list(X = data_train$X, 
                                 Y = data_train$Y, 
@@ -102,7 +104,8 @@ for (i in 1:nrow(par_grid)) {
                                 W.hat = centered$W_hat,
                                 num.trees = nt))
     make_args <- function(mm) modifyList(args_grf, list(method = mm))
-    
+
+    # Fit forest and make predictions
     pred_stats <- sapply(methods, function(method) {
       # Fit forest (Stage I)
       forest <- do.call(FUN_grf$FUN, make_args(method))
@@ -143,25 +146,34 @@ for (i in 1:nrow(par_grid)) {
 t1 <- Sys.time()
 
 #--------------------------------------------------
+#----- POST-PROCESS SIMULATION RESULTS
+#--------------------------------------------------
+df_sim <- bind_rows(sim_list) %>%
+  mutate(method = factor(method, levels = methods)) %>%
+  mutate(method = recode(method, fpt2 = "FPT"))
+
+df_avg_mse <- df_sim %>% select(-dim_mse, -nsplits)
+df_dim_mse <- df_sim %>% 
+  select(-avg_mse, -nsplits) %>%
+  unnest_longer(dim_mse) %>%
+  unnest(dim_mse)
+df_nsplits <- df_sim %>%
+  select(-avg_mse, -dim_mse) %>%
+  unnest_longer(nsplits) %>%
+  unnest(nsplits)
+
+#--------------------------------------------------
 #----- SAVE DATA
 #--------------------------------------------------
-df_times <- bind_rows(sim_times) %>%
-  mutate(median = as.numeric(median))
-df_times_wide <- df_times %>%
-  pivot_wider(
-    names_from = method, 
-    values_from = median
-  ) %>%
-  mutate(#fpt1_FACTOR = as.numeric(grad)/as.numeric(fpt1),
-    fpt2_FACTOR = as.numeric(grad)/as.numeric(fpt2))
 
 datetime <- format(Sys.time(), format = "%Y%m%d-%H%M")
 
 make_filename <- function(label) {
-  sprintf("%s-%s-%s-%s-%s.csv", FILENAME_HEAD, model_type, setting_id, label, datetime)
+  sprintf("%s-%s-%s-%s-%s.csv", FILENAME_HEAD, label, model_type, setting_id, datetime)
 }
 
-write.csv(df_times, file = make_filename("long"), row.names = FALSE)
-write.csv(df_times_wide, file = make_filename("wide"), row.names = FALSE)
+write.csv(df_avg_mse, file = make_filename("avg_mse"), row.names = FALSE)
+write.csv(df_dim_mse, file = make_filename("dim_mse"), row.names = FALSE)
+write.csv(df_nsplits, file = make_filename("nsplits"), row.names = FALSE)
 
 cat("Total elapsed time:", format(difftime(t1, t0), digits = 6), "\n")
