@@ -22,7 +22,7 @@ settings <- validate_setting(model_type = model_type, setting_id = setting_id)
 #----- DATA/FOREST SETTINGS
 #--------------------------------------------------
 seed <- 1
-mse_nreps <- 50
+mse_nreps <- 40
 
 # Algorithm/model params
 #methods <- c("grad", "fpt1", "fpt2")
