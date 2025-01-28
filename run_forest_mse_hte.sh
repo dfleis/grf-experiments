@@ -1,6 +1,6 @@
 #! /bin/bash
 
-#module load r/4.4.0
+module load r/4.4.0
 
 MODEL=hte
 
