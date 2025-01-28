@@ -2,7 +2,7 @@
 
 # Slurm parameters
 MEMO=25G        # memory allocation
-TIME=0-24:00:00 # time allocation
+TIME=0-20:00:00 # time allocation
 CORE=50         # core allocation
 
 CHDIR=/home/yyang/scratch/grf-experiments
@@ -30,5 +30,5 @@ for MODEL in vcm hte; do
 	echo $ORD
 
 	# Submit order
-	#$ORD
+	$ORD
 done
