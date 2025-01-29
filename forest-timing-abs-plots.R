@@ -37,37 +37,38 @@ MY_FONT_SIZE <- 8
 MY_FONT_SIZE_AXIS_X <- 7
 MY_FONT_SIZE_AXIS_Y <- 5
 MY_FONT_SIZE_STRIP <- 6
-MY_COLORS <- scales::hue_pal()(2) # methods
+#MY_COLORS <- scales::hue_pal()(2) # methods
+MY_COLORS <- c("#4390e8", "#4cd461")
 
 my_theme <- function() {
   theme(
     strip.background = element_blank(),
-    strip.text = element_text(size = MY_FONT_SIZE_STRIP,
+    strip.text = element_text(size = MY_FONT_SIZE_STRIP, 
                               margin = margin(2,0,2,0)),
-    #strip.text.x = element_blank(),
-    #strip.text.y = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.ticks.y = element_line(color = "gray90", linewidth = 0.25),
     axis.ticks.length = unit(-0.1, "cm"),
     axis.text = element_text(family = MY_FONT_FAMILY),
     axis.text.x = element_text(size = MY_FONT_SIZE_AXIS_X),
     axis.text.y = element_text(size = MY_FONT_SIZE_AXIS_Y),
-    panel.grid = element_blank(),
-    panel.background = element_rect(fill = "white", color = "black"),
-    panel.border = element_rect(color = 'black', fill = NA),
-    panel.grid.major.y = element_line(color = "gray95"),
-    panel.grid.major.x = element_line(color = "gray95"),
+    axis.line.y = element_line(color = "gray90", linewidth = 0.5),
+    panel.background = element_rect(fill = "white", color = NA),
+    panel.border = element_blank(),
+    panel.grid.major.y = element_line(color = "gray95", linewidth = 0.25),
+    panel.grid.major.x = element_line(color = "gray95", linewidth = 0.25),
     text = element_text(size = MY_FONT_SIZE, family = MY_FONT_FAMILY),
     legend.position = "none",
-    plot.title = element_text(size = MY_FONT_SIZE,
+    plot.title = element_text(size = MY_FONT_SIZE, 
                               margin = margin(b = 0)),
-    plot.subtitle = element_text(size = MY_FONT_SIZE,
+    plot.subtitle = element_text(size = MY_FONT_SIZE, 
                                  margin = margin(b = -4)))
 }
 
 #----------------------------------------------------------------------
 #---------- DRAW PLOTS
 #----------------------------------------------------------------------
-MODEL_TYPE <- "vcm"
-SETTING_ID <- 1
+MODEL_TYPE <- "hte"
+SETTING_ID <- 5
 
 df_plt <- df_all %>% filter(model_type == MODEL_TYPE, setting_id == SETTING_ID)
 
@@ -81,28 +82,29 @@ my_label_np_ypos <- switch(MODEL_TYPE, "vcm" = 0.75, "hte" = 0.90)
 my_label_trees_ypos <- switch(MODEL_TYPE, "vcm" = 3.05, "hte" = 1.60)
 my_model_colors <- switch(MODEL_TYPE, "vcm" = MY_COLORS[1:4], "hte" = MY_COLORS)
 
-model_label <- switch(MODEL_TYPE,
-                      "vcm" = "Varying coefficient model",
+model_label <- switch(MODEL_TYPE, 
+                      "vcm" = "Varying coefficient model", 
                       "hte" = "Heterogeneous treatment effects")
 title_str <- sprintf("Forest fit times: %s", model_label)
 subtitle_str <- sprintf("Setting %s", SETTING_ID)
 
 ### MAKE PLOTS
 plt <- df_plt %>%
-  ggplot(aes(x = method, y = median, fill = method)) +
+  ggplot(aes(x = method, y = median, fill = method)) + 
   geom_col(position = position_dodge(width = 0.8), width = 0.7) +
   labs(x = "Method", y = "Fit time (seconds)", fill = "Method") +
   ggtitle(title_str, subtitle = subtitle_str) +
   facet_nested_wrap(
-    nt ~ n + K,
-    scales = "free_y",
+    nt ~ n + K, 
+    scales = "free_y", 
     nrow = 3,
     labeller = labeller(
       nt = as_labeller(function(x) paste("Trees =", x)),
       n = as_labeller(function(x) paste("n =", x)),
       K = as_labeller(function(x) paste("K =", x))),
     nest_line = element_line(linewidth = 0.1, color = "gray50"),
-    strip = strip_nested(size = "variable")) +
+    strip = strip_nested(size = "variable")) + 
+  scale_fill_manual(values = MY_COLORS) + 
   my_theme()
 
 filename_plt <- sprintf("figures/forest-timing-abs-%s-%s.png", MODEL_TYPE, SETTING_ID)
