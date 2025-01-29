@@ -73,8 +73,8 @@ df_plt <- df_all %>% filter(model_type == MODEL_TYPE)
 
 ### MODEL-SPECIFIC SETTINGS
 model_label <- switch(MODEL_TYPE, 
-                      "vcm" = "Varying coefficient model", 
-                      "hte" = "Heterogeneous treatment effects")
+                      "vcm" = "Varying coefficient model (VCM)", 
+                      "hte" = "Heterogeneous treatment effects (HTE)")
 title_str <- sprintf("Forest fit times: %s", model_label)
 subtitle_str <- "K = 256, n = 10000"
 
@@ -86,13 +86,13 @@ plt <- df_plt %>%
   ggtitle(title_str, subtitle = subtitle_str) +
   facet_nested_wrap(
     nt ~ setting_id, 
-    scales = "free_y", 
+    scales = "free", 
     nrow = 3,
     labeller = labeller(
       nt = as_labeller(function(x) paste("Trees =", x)),
       n = as_labeller(function(x) paste("n =", x)),
       K = as_labeller(function(x) paste("K =", x)),
-      setting_id = as_labeller(function(x) paste("Setting =", x))),
+      setting_id = as_labeller(function(x) sprintf("%s Setting %s", toupper(MODEL_TYPE), x))),
     nest_line = element_line(linewidth = 0.1, color = "gray50"),
     strip = strip_nested(size = "variable")) + 
   scale_fill_manual(values = MY_COLORS) + 
