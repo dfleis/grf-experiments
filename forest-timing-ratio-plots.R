@@ -39,27 +39,27 @@ df_ratio <- df_all %>% # ratio of GRF-grad/GRF-FPT (speedup factor)
 MY_FONT_FAMILY <- "sans"
 MY_FONT_FAMILY_MONO <- "mono"
 
-MY_FONT_SIZE <- 12
-MY_FONT_SIZE_LEGEND <- 12
+MY_FONT_SIZE <- 10
+MY_FONT_SIZE_LEGEND <- 9
 MY_FONT_SIZE_LABEL <- 10
 MY_COLORS <- scales::hue_pal()(5) # number of settings
 
 my_theme <- function() {
   theme(
     strip.background = element_blank(),
-    strip.text = element_text(size = 12),
     strip.text.x = element_blank(),
     strip.text.y = element_blank(),
+    axis.ticks.y = element_line(color = "gray90", linewidth = 0.25),
     axis.ticks.length = unit(-0.1, "cm"),
     axis.text = element_text(family = MY_FONT_FAMILY),
-    panel.grid = element_blank(),
-    panel.background = element_rect(fill = "white", color = "black"),
-    panel.border = element_rect(color = 'black', fill = NA),
-    panel.grid.major.y = element_line(color = "gray95"),
-    panel.grid.major.x = element_line(color = "gray95"),
+    axis.line.y = element_line(color = "gray90", linewidth = 0.5),
+    panel.background = element_rect(fill = "white", color = NA),
+    panel.border = element_blank(),
+    panel.grid.major.y = element_line(color = "gray95", linewidth = 0.25),
+    panel.grid.major.x = element_line(color = "gray95", linewidth = 0.25),
     text = element_text(size = MY_FONT_SIZE, family = MY_FONT_FAMILY),
     legend.key = element_rect(color = NA),
-    legend.key.width = unit(1.5, "lines"),
+    legend.key.width = unit(1, "lines"),
     legend.margin = margin(0.15, 0.5, 0.15, 0.3, "lines"),
     #legend.background = element_rect(linewidth = 0.5, color = "gray65"),
     legend.text = element_text(size = MY_FONT_SIZE_LEGEND))
@@ -172,10 +172,9 @@ plt_bar <- df_plt_adjusted %>%
   my_labeller_np(df_plt, y = my_label_np_ypos - 1) +
   my_labeller_trees(df_plt, y = my_label_trees_ypos - 1)
 
-
+#filename_plt_line <- sprintf("figures/forest-timing-ratio-%s-line.png", MODEL_TYPE)
 filename_plt_bar <- sprintf("figures/forest-timing-ratio-%s-bar.png", MODEL_TYPE)
-filename_plt_line <- sprintf("figures/forest-timing-ratio-%s-line.png", MODEL_TYPE)
 
-ggsave(filename_plt_line, plot = plt_line, width = 6, height = 7)
-ggsave(filename_plt_bar, plot = plt_bar, width = 6, height = 7)
+#ggsave(filename_plt_line, plot = plt_line, width = 6, height = 7)
+ggsave(filename_plt_bar, plot = plt_bar, width = 7, height = 7)
 
