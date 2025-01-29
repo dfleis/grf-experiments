@@ -6,7 +6,9 @@
 *.rdata
 
 !forest-timing-*.csv
+!forest-timing-large-K-*.csv
 !forest-mse-*.csv
 
 !forest-timing
+!forest-timing-large-K
 !forest-mse
