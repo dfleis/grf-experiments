@@ -35,8 +35,8 @@ MY_FONT_FAMILY_MONO <- "mono"
 
 MY_FONT_SIZE <- 8
 MY_FONT_SIZE_AXIS_X <- 7
-MY_FONT_SIZE_AXIS_Y <- 4
-MY_FONT_SIZE_STRIP <- 5
+MY_FONT_SIZE_AXIS_Y <- 5
+MY_FONT_SIZE_STRIP <- 6
 MY_COLORS <- scales::hue_pal()(2) # methods
 
 my_theme <- function() {
