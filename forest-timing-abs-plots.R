@@ -73,15 +73,6 @@ SETTING_ID <- 5
 df_plt <- df_all %>% filter(model_type == MODEL_TYPE, setting_id == SETTING_ID)
 
 ### MODEL-SPECIFIC SETTINGS
-my_ylim <- switch(MODEL_TYPE,
-                  "vcm" = c(0.6, 3.15),
-                  "hte" = c(0.85, 1.65))
-my_breaks <- pretty(seq(min(my_ylim), max(my_ylim), length.out = 5))
-
-my_label_np_ypos <- switch(MODEL_TYPE, "vcm" = 0.75, "hte" = 0.90)
-my_label_trees_ypos <- switch(MODEL_TYPE, "vcm" = 3.05, "hte" = 1.60)
-my_model_colors <- switch(MODEL_TYPE, "vcm" = MY_COLORS[1:4], "hte" = MY_COLORS)
-
 model_label <- switch(MODEL_TYPE, 
                       "vcm" = "Varying coefficient model", 
                       "hte" = "Heterogeneous treatment effects")
