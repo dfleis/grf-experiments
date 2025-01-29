@@ -17,8 +17,8 @@ mkdir -p $LOGS
 # Loop over both model types
 for MODEL in vcm hte; do
 	# Assemble components for the slurm order for this job
-	JOBN="forest_timing_${MODEL}"
-	SCRIPT="run_forest_timing_${MODEL}.sh"
+	JOBN="forest_timing_large_K_${MODEL}"
+	SCRIPT="run_forest_timing_large_K_${MODEL}.sh"
 
 	OUTF=$LOGS"/"$JOBN".out"
 	ERRF=$LOGS"/"$JOBN".err"
