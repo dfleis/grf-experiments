@@ -4,10 +4,8 @@
 
 # directories
 old/scrap/
-figures/
 logs/
 local/
 
-*.pdf
 *.err
 *.out
