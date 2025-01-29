@@ -67,17 +67,17 @@ my_theme <- function() {
 #----------------------------------------------------------------------
 #---------- DRAW PLOTS
 #----------------------------------------------------------------------
-MODEL_TYPE <- "hte"
-SETTING_ID <- 5
+MODEL_TYPE <- "vcm"
+SETTING_ID <- 1
 
 df_plt <- df_all %>% filter(model_type == MODEL_TYPE, setting_id == SETTING_ID)
 
 ### MODEL-SPECIFIC SETTINGS
 model_label <- switch(MODEL_TYPE, 
-                      "vcm" = "Varying coefficient model", 
-                      "hte" = "Heterogeneous treatment effects")
+                      "vcm" = "Varying coefficient model (VCM)", 
+                      "hte" = "Heterogeneous treatment effects (HTE)")
 title_str <- sprintf("Forest fit times: %s", model_label)
-subtitle_str <- sprintf("Setting %s", SETTING_ID)
+subtitle_str <- sprintf("%s Setting %s", toupper(MODEL_TYPE), SETTING_ID)
 
 ### MAKE PLOTS
 plt <- df_plt %>%
@@ -87,7 +87,7 @@ plt <- df_plt %>%
   ggtitle(title_str, subtitle = subtitle_str) +
   facet_nested_wrap(
     nt ~ n + K, 
-    scales = "free_y", 
+    scales = "free", 
     nrow = 3,
     labeller = labeller(
       nt = as_labeller(function(x) paste("Trees =", x)),
