@@ -30,5 +30,5 @@ for MODEL in vcm hte; do
 	echo $ORD
 
 	# Submit order
-	#$ORD
+	$ORD
 done
