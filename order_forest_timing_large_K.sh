@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Slurm parameters
-MEMO=40G        # memory allocation
+MEMO=120G        # memory allocation
 TIME=0-02:00:00 # time allocation
 CORE=1          # core allocation
 
@@ -15,7 +15,7 @@ LOGS=logs
 mkdir -p $LOGS
 
 # Loop over both model types
-for MODEL in vcm; do
+for MODEL in vcm hte; do
 	# Assemble components for the slurm order for this job
 	JOBN="forest_timing_${MODEL}"
 	SCRIPT="run_forest_timing_${MODEL}.sh"
@@ -30,5 +30,5 @@ for MODEL in vcm; do
 	echo $ORD
 
 	# Submit order
-	$ORD
+	#$ORD
 done

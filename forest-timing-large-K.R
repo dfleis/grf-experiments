@@ -6,7 +6,7 @@ source("utils-forest.R")
 
 BENCH_QUIET <- TRUE
 NUM_THREADS <- 1
-FILENAME_HEAD <- "data/forest-timing"
+FILENAME_HEAD <- "data/forest-timing-large-K"
 
 args <- commandArgs(TRUE)
 model_type <- args[1] # "vcm" or "hte"
