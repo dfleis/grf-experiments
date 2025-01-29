@@ -6,7 +6,7 @@ library(pals)
 
 path <- "data/forest-timing-large-K"
 basename_pattern_hte <- "forest-timing-large-K-hte-.*-long-.*\\.csv"
-basename_pattern_vcm <- "forest-timing-vcm-.*-long-.*\\.csv"
+basename_pattern_hte <- "forest-timing-large-K-vcm-.*-long-.*\\.csv"
 
 filenames_hte <- list.files(path = path, pattern = basename_pattern_hte, full.names = T)
 filenames_vcm <- list.files(path = path, pattern = basename_pattern_vcm, full.names = T)
@@ -67,7 +67,7 @@ my_theme <- function() {
 #----------------------------------------------------------------------
 #---------- DRAW PLOTS
 #----------------------------------------------------------------------
-MODEL_TYPE <- "hte"
+MODEL_TYPE <- "vcm"
 
 df_plt <- df_all %>% filter(model_type == MODEL_TYPE)
 
