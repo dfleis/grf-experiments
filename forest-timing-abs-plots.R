@@ -33,16 +33,17 @@ df_all <- list(df_list_hte, df_list_vcm) %>% # absolute time
 MY_FONT_FAMILY <- "sans"
 MY_FONT_FAMILY_MONO <- "mono"
 
-MY_FONT_SIZE <- 9
-MY_FONT_SIZE_AXIS_X <- 8
-MY_FONT_SIZE_AXIS_Y <- 6
-MY_FONT_SIZE_STRIP <- 6
+MY_FONT_SIZE <- 8
+MY_FONT_SIZE_AXIS_X <- 7
+MY_FONT_SIZE_AXIS_Y <- 4
+MY_FONT_SIZE_STRIP <- 5
 MY_COLORS <- scales::hue_pal()(2) # methods
 
 my_theme <- function() {
   theme(
     strip.background = element_blank(),
-    strip.text = element_text(size = MY_FONT_SIZE_STRIP),
+    strip.text = element_text(size = MY_FONT_SIZE_STRIP,
+                              margin = margin(2,0,2,0)),
     #strip.text.x = element_blank(),
     #strip.text.y = element_blank(),
     axis.ticks.length = unit(-0.1, "cm"),
@@ -56,8 +57,10 @@ my_theme <- function() {
     panel.grid.major.x = element_line(color = "gray95"),
     text = element_text(size = MY_FONT_SIZE, family = MY_FONT_FAMILY),
     legend.position = "none",
-    plot.title = element_text(margin = margin(b = -1)),
-    plot.subtitle = element_text(margin = margin(b = -10)))
+    plot.title = element_text(size = MY_FONT_SIZE,
+                              margin = margin(b = 0)),
+    plot.subtitle = element_text(size = MY_FONT_SIZE,
+                                 margin = margin(b = -4)))
 }
 
 #----------------------------------------------------------------------
@@ -78,29 +81,29 @@ my_label_np_ypos <- switch(MODEL_TYPE, "vcm" = 0.75, "hte" = 0.90)
 my_label_trees_ypos <- switch(MODEL_TYPE, "vcm" = 3.05, "hte" = 1.60)
 my_model_colors <- switch(MODEL_TYPE, "vcm" = MY_COLORS[1:4], "hte" = MY_COLORS)
 
-model_label <- switch(MODEL_TYPE, 
-                      "vcm" = "Varying coefficient model", 
+model_label <- switch(MODEL_TYPE,
+                      "vcm" = "Varying coefficient model",
                       "hte" = "Heterogeneous treatment effects")
 title_str <- sprintf("Forest fit times: %s", model_label)
 subtitle_str <- sprintf("Setting %s", SETTING_ID)
 
 ### MAKE PLOTS
 plt <- df_plt %>%
-  ggplot(aes(x = method, y = median, fill = method)) + 
+  ggplot(aes(x = method, y = median, fill = method)) +
   geom_col(position = position_dodge(width = 0.8), width = 0.7) +
   labs(x = "Method", y = "Fit time (seconds)", fill = "Method") +
   ggtitle(title_str, subtitle = subtitle_str) +
   facet_nested_wrap(
-    nt ~ n + K, 
-    scales = "free_y", 
+    nt ~ n + K,
+    scales = "free_y",
     nrow = 3,
     labeller = labeller(
       nt = as_labeller(function(x) paste("Trees =", x)),
       n = as_labeller(function(x) paste("n =", x)),
       K = as_labeller(function(x) paste("K =", x))),
-    nest_line = element_line(linewidth = 0.1, color = "gray50")) + 
+    nest_line = element_line(linewidth = 0.1, color = "gray50"),
+    strip = strip_nested(size = "variable")) +
   my_theme()
 
 filename_plt <- sprintf("figures/forest-timing-abs-%s-%s.png", MODEL_TYPE, SETTING_ID)
-ggsave(filename_plt, plot = plt, width = 7, height = 5)
-
+ggsave(filename_plt, plot = plt, width = 7, height = 4)
