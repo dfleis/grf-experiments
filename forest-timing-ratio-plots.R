@@ -49,6 +49,7 @@ my_theme <- function() {
     strip.background = element_blank(),
     strip.text.x = element_blank(),
     strip.text.y = element_blank(),
+    axis.ticks.x = element_line(color = "gray90", linewidth = 0.25),
     axis.ticks.y = element_line(color = "gray90", linewidth = 0.25),
     axis.ticks.length = unit(-0.1, "cm"),
     axis.text = element_text(family = MY_FONT_FAMILY),
@@ -115,7 +116,7 @@ my_labeller_trees <- function(df, x, y) {
 #----------------------------------------------------------------------
 #---------- DRAW PLOTS
 #----------------------------------------------------------------------
-MODEL_TYPE <- "vcm"
+MODEL_TYPE <- "hte"
 
 df_plt <- df_ratio %>% filter(model_type == MODEL_TYPE)
 
@@ -130,18 +131,19 @@ my_label_np_ypos <- switch(MODEL_TYPE, "vcm" = 0.75, "hte" = 0.90)
 my_label_trees_ypos <- switch(MODEL_TYPE, "vcm" = 3.05, "hte" = 1.60)
 my_model_colors <- switch(MODEL_TYPE, "vcm" = MY_COLORS[1:4], "hte" = MY_COLORS)
 
+title_str <- "Forest fit time speedup factor: GRF-grad time/GRF-FPT time"
 subtitle_str <- 
   switch(MODEL_TYPE,
-         "vcm" = "Varying coefficient model",
-         "hte" = "Heterogeneous treatment effects")
+         "vcm" = "Varying coefficient model (VCM)",
+         "hte" = "Heterogeneous treatment effects (HTE)")
+legend_str <- sprintf("%s\nSetting", toupper(MODEL_TYPE))
 
 ### MAKE PLOTS (line/point)
 plt_line <- df_plt %>%
   ggplot(aes(x = K, y = ratio, group = setting_id, color = setting_id, shape = setting_id)) +
   geom_hline(aes(yintercept = hline), col = 'gray75', linewidth = 0.75, linetype = "solid") +
-  labs(x = "Number of regressors (K)", y = "Speedup factor", color = "Setting", shape = "Setting") +
-  ggtitle("Forest fit time speedup factor: GRF-grad/GRF-FPT",
-          subtitle = subtitle_str) +
+  labs(x = "Number of regressors (K)", y = "Speedup factor", color = legend_str, shape = legend_str) +
+  ggtitle(title_str, subtitle = subtitle_str) +
   geom_line() +
   geom_point(size = 2) +
   facet_grid(nt ~ n + p) +
@@ -157,11 +159,10 @@ df_plt_adjusted <- df_plt %>%
 
 plt_bar <- df_plt_adjusted %>%
   ggplot(aes(x = K, y = ratio_from_one, fill = setting_id)) + 
-  geom_col(position = position_dodge(width = 0.8), width = 0.7) +
+  geom_col(position = position_dodge(width = 0.6), width = 0.5) +
   geom_hline(yintercept = 0, col = 'gray75', linewidth = 0.75, linetype = "solid") +
-  labs(x = "Regressor dimension (K)", y = "Speedup factor", fill = "Setting") +
-  ggtitle("Forest fit time speedup factor: GRF-grad/GRF-FPT", 
-          subtitle = subtitle_str) + 
+  labs(x = "Regressor dimension (K)", y = "Speedup factor", fill = legend_str) +
+  ggtitle(title_str, subtitle = subtitle_str) + 
   facet_grid(nt ~ n + p) +
   scale_y_continuous(
     limits = my_ylim - 1,
@@ -176,5 +177,5 @@ plt_bar <- df_plt_adjusted %>%
 filename_plt_bar <- sprintf("figures/forest-timing-ratio-%s-bar.png", MODEL_TYPE)
 
 #ggsave(filename_plt_line, plot = plt_line, width = 6, height = 7)
-ggsave(filename_plt_bar, plot = plt_bar, width = 7, height = 7)
+ggsave(filename_plt_bar, plot = plt_bar, width = 7, height = 4.5)
 
