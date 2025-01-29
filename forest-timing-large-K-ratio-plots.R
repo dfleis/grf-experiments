@@ -3,9 +3,9 @@ library(gridExtra)
 library(scales)
 library(pals)
 
-path <- "data/forest-timing"
-basename_pattern_hte <- "forest-timing-hte-.*-long-.*\\.csv"
-basename_pattern_vcm <- "forest-timing-vcm-.*-long-.*\\.csv"
+path <- "data/forest-timing-large-K"
+basename_pattern_hte <- "forest-timing-large-K-hte-.*-long-.*\\.csv"
+basename_pattern_vcm <- "forest-timing-large-K-vcm-.*-long-.*\\.csv"
 
 filenames_hte <- list.files(path = path, pattern = basename_pattern_hte, full.names = T)
 filenames_vcm <- list.files(path = path, pattern = basename_pattern_vcm, full.names = T)
@@ -23,7 +23,7 @@ df_all <- list(df_list_hte, df_list_vcm) %>% # absolute time
          nt = as.factor(nt),
          setting_id = as.factor(setting_id),
          model_type = as.factor(model_type))
-         
+
 df_ratio <- df_all %>% # ratio of GRF-grad/GRF-FPT (speedup factor)
   group_by(model_type, setting_id, n, p, K, nt) %>%
   reframe("FPT" = median[method == "grad"]/median[method == "FPT"]) %>%
@@ -65,6 +65,7 @@ my_theme <- function() {
     #legend.background = element_rect(linewidth = 0.5, color = "gray65"),
     legend.text = element_text(size = MY_FONT_SIZE_LEGEND))
 }
+
 
 my_labeller_np <- function(df, x, y) {
   if (missing(x)) x <- (1 + length(levels(df$K)))/2
@@ -116,19 +117,19 @@ my_labeller_trees <- function(df, x, y) {
 #----------------------------------------------------------------------
 #---------- DRAW PLOTS
 #----------------------------------------------------------------------
-MODEL_TYPE <- "hte"
+MODEL_TYPE <- "vcm"
 
 df_plt <- df_ratio %>% filter(model_type == MODEL_TYPE)
 
 ### MODEL-SPECIFIC SETTINGS
 my_ylim <- switch(MODEL_TYPE,
                   "vcm" = c(0.6, 3.15),
-                  "hte" = c(0.85, 1.65))
+                  "hte" = c(0.9, 1.45))
 my_breaks <- pretty(seq(min(my_ylim), max(my_ylim), length.out = 5))
 
 #my_label_ypos <- switch(MODEL_TYPE, "vcm" = 1, "hte" = 1)
-my_label_np_ypos <- switch(MODEL_TYPE, "vcm" = 0.75, "hte" = 0.90)
-my_label_trees_ypos <- switch(MODEL_TYPE, "vcm" = 3.05, "hte" = 1.60)
+my_label_np_ypos <- switch(MODEL_TYPE, "vcm" = 0.75, "hte" = 0.95)
+my_label_trees_ypos <- switch(MODEL_TYPE, "vcm" = 3.05, "hte" = 1.45)
 my_model_colors <- switch(MODEL_TYPE, "vcm" = MY_COLORS[1:4], "hte" = MY_COLORS)
 
 title_str <- "Forest fit time speedup factor: GRF-grad time/GRF-FPT time"
@@ -138,32 +139,17 @@ subtitle_str <-
          "hte" = "Heterogeneous treatment effects (HTE)")
 legend_str <- sprintf("%s\nSetting", toupper(MODEL_TYPE))
 
-# ### MAKE PLOTS (line/point)
-# plt_line <- df_plt %>%
-#   ggplot(aes(x = K, y = ratio, group = setting_id, color = setting_id, shape = setting_id)) +
-#   geom_hline(aes(yintercept = hline), col = 'gray75', linewidth = 0.75, linetype = "solid") +
-#   labs(x = "Number of regressors (K)", y = "Speedup factor", color = legend_str, shape = legend_str) +
-#   ggtitle(title_str, subtitle = subtitle_str) +
-#   geom_line() +
-#   geom_point(size = 2) +
-#   facet_grid(nt ~ n + p) +
-#   scale_y_continuous(limits = my_ylim, breaks = my_breaks) +
-#   scale_color_manual(values = my_model_colors) + 
-#   my_theme() +
-#   my_labeller_np(df_plt, y = my_label_np_ypos) +
-#   my_labeller_trees(df_plt, y = my_label_trees_ypos)
-
 ### MAKE PLOTS (barplot)
 df_plt_adjusted <- df_plt %>%
   mutate(ratio_from_one = ratio - 1) # calculate height from baseline of 1
 
 plt_bar <- df_plt_adjusted %>%
   ggplot(aes(x = K, y = ratio_from_one, fill = setting_id)) + 
-  geom_col(position = position_dodge(width = 0.6), width = 0.5) +
+  geom_col(position = position_dodge(width = 0.3), width = 0.2) +
   geom_hline(yintercept = 0, col = 'gray75', linewidth = 0.75, linetype = "solid") +
   labs(x = "Regressor dimension (K)", y = "Speedup factor", fill = legend_str) +
   ggtitle(title_str, subtitle = subtitle_str) + 
-  facet_grid(nt ~ n + p) +
+  facet_grid(n + p ~ nt) +
   scale_y_continuous(
     oob = rescale_none,
     limits = my_ylim - 1,
@@ -172,11 +158,9 @@ plt_bar <- df_plt_adjusted %>%
   scale_fill_manual(values = my_model_colors) + 
   my_theme() +
   my_labeller_np(df_plt, y = my_label_np_ypos - 1) +
-  my_labeller_trees(df_plt, y = my_label_trees_ypos - 1)
+  my_labeller_trees(df_plt, y = my_label_trees_ypos - 1) 
 
-#filename_plt_line <- sprintf("figures/forest-timing-ratio-%s-line.png", MODEL_TYPE)
-filename_plt_bar <- sprintf("figures/forest-timing-ratio-%s-bar.png", MODEL_TYPE)
+filename_plt_bar <- sprintf("figures/forest-timing-large-K-ratio-%s-bar.png", MODEL_TYPE)
+ggsave(filename_plt_bar, plot = plt_bar, width = 7, height = 2.5)
 
-#ggsave(filename_plt_line, plot = plt_line, width = 6, height = 7)
-ggsave(filename_plt_bar, plot = plt_bar, width = 7, height = 4.5)
-
+plt_bar
