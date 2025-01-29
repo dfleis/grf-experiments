@@ -6,16 +6,15 @@ library(pals)
 
 path <- "data/forest-timing-large-K"
 basename_pattern_hte <- "forest-timing-large-K-hte-.*-long-.*\\.csv"
-#basename_pattern_vcm <- "forest-timing-vcm-.*-long-.*\\.csv"
+basename_pattern_vcm <- "forest-timing-vcm-.*-long-.*\\.csv"
 
 filenames_hte <- list.files(path = path, pattern = basename_pattern_hte, full.names = T)
-#filenames_vcm <- list.files(path = path, pattern = basename_pattern_vcm, full.names = T)
+filenames_vcm <- list.files(path = path, pattern = basename_pattern_vcm, full.names = T)
 
 df_list_hte <- lapply(filenames_hte, function(fnm) read.csv(fnm))
-#df_list_vcm <- lapply(filenames_vcm, function(fnm) read.csv(fnm))
+df_list_vcm <- lapply(filenames_vcm, function(fnm) read.csv(fnm))
 
-#df_all <- list(df_list_hte, df_list_vcm) %>% # absolute time
-df_all <- list(df_list_hte) %>% # absolute time  
+df_all <- list(df_list_hte, df_list_vcm) %>% # absolute time
   bind_rows() %>%
   mutate(method = recode(method, "grad" = "grad", "fpt2" = "FPT")) %>%
   mutate(method = factor(method, levels = c("grad", "FPT")),
@@ -100,4 +99,5 @@ plt <- df_plt %>%
   my_theme()
 
 filename_plt <- sprintf("figures/forest-timing-large-K-abs-%s.png", MODEL_TYPE)
-ggsave(filename_plt, plot = plt, width = 7, height = 4)
+#ggsave(filename_plt, plot = plt, width = 7, height = 4)
+plt
