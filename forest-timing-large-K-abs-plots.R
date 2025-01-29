@@ -6,7 +6,7 @@ library(pals)
 
 path <- "data/forest-timing-large-K"
 basename_pattern_hte <- "forest-timing-large-K-hte-.*-long-.*\\.csv"
-basename_pattern_hte <- "forest-timing-large-K-vcm-.*-long-.*\\.csv"
+basename_pattern_vcm <- "forest-timing-large-K-vcm-.*-long-.*\\.csv"
 
 filenames_hte <- list.files(path = path, pattern = basename_pattern_hte, full.names = T)
 filenames_vcm <- list.files(path = path, pattern = basename_pattern_vcm, full.names = T)
@@ -67,7 +67,7 @@ my_theme <- function() {
 #----------------------------------------------------------------------
 #---------- DRAW PLOTS
 #----------------------------------------------------------------------
-MODEL_TYPE <- "vcm"
+MODEL_TYPE <- "hte"
 
 df_plt <- df_all %>% filter(model_type == MODEL_TYPE)
 
@@ -99,5 +99,5 @@ plt <- df_plt %>%
   my_theme()
 
 filename_plt <- sprintf("figures/forest-timing-large-K-abs-%s.png", MODEL_TYPE)
-#ggsave(filename_plt, plot = plt, width = 7, height = 4)
-plt
+ggsave(filename_plt, plot = plt, width = 7, height = 4)
+
