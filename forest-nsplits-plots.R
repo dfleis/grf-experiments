@@ -4,7 +4,8 @@ library(gridExtra)
 library(scales)
 library(pals)
 
-path <- "data/forest-mse/K4/"
+path <- "data/forest-mse/K4"
+#path <- "data/forest-mse"
 basename_pattern_hte <- "forest-mse-nsplits-hte-.*\\.csv"
 basename_pattern_vcm <- "forest-mse-nsplits-vcm-.*\\.csv"
 
@@ -68,9 +69,9 @@ my_theme <- function() {
 #----------------------------------------------------------------------
 #---------- DRAW PLOTS
 #----------------------------------------------------------------------
-MODEL_TYPE <- "vcm"
-K_VAL <- 4
-N_VAL <- 20000
+MODEL_TYPE <- "hte"
+K_VAL <- unique(df_all$K)
+N_VAL <- unique(df_all$n)
 
 df_plt <- df_all %>% filter(model_type == MODEL_TYPE, K == K_VAL, n == N_VAL)
 
