@@ -68,7 +68,7 @@ my_theme <- function() {
 #----------------------------------------------------------------------
 #---------- DRAW PLOTS
 #----------------------------------------------------------------------
-MODEL_TYPE <- "vcm"
+MODEL_TYPE <- "hte"
 K_VAL <- 4
 N_VAL <- 20000
 
@@ -86,11 +86,11 @@ plt <- df_plt %>%
   ggplot(aes(x = method, y = avg_mse, fill = method, color = method)) + 
   labs(x = "Method", y = "MSE", fill = "Method", color = "Method") +
   ggtitle(title_str, subtitle = subtitle_str) +
-  #geom_boxplot(alpha = 0.3) + 
-  geom_boxplot(alpha = 0.3, outliers = FALSE, width = 0.5) + 
+  geom_boxplot(alpha = 0.3) + 
+  #geom_boxplot(alpha = 0.3, outliers = FALSE, width = 0.5) + 
   #geom_violin(alpha = 0.3) +
-  geom_point(position = position_jitter(seed = 1, width = 0.2), 
-             alpha = 0.5, size = 0.75) +
+  #geom_point(position = position_jitter(seed = 1, width = 0.2), 
+  #           alpha = 0.5, size = 0.75) +
   facet_nested_wrap(
     . ~ setting_id,  
     scales = "free", 
@@ -102,5 +102,5 @@ plt <- df_plt %>%
 
 filename_plt <- sprintf("figures/forest-mse-%s-%s-%s.png", MODEL_TYPE, K_VAL, N_VAL)
 ggsave(filename_plt, plot = plt, width = 7, height = 4)
-plt
+
 
