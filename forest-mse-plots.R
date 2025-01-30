@@ -68,7 +68,7 @@ my_theme <- function() {
 #----------------------------------------------------------------------
 #---------- DRAW PLOTS
 #----------------------------------------------------------------------
-MODEL_TYPE <- "hte"
+MODEL_TYPE <- "vcm"
 K_VAL <- 4
 N_VAL <- 20000
 
@@ -79,7 +79,7 @@ model_label <- switch(MODEL_TYPE,
                       "vcm" = "Varying coefficient model (VCM)", 
                       "hte" = "Heterogeneous treatment effects (HTE)")
 title_str <- sprintf("MSE estimates: %s", model_label)
-subtitle_str <- sprintf("5000 test observations, 40 replications\nK = %s, n = %s", K_VAL, N_VAL)
+subtitle_str <- sprintf("5000 test observations, 40 replications, 100 trees\nK = %s, n = %s", K_VAL, N_VAL)
 
 
 plt <- df_plt %>%
