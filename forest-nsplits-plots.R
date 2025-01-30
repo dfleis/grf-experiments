@@ -44,7 +44,7 @@ my_theme <- function() {
     strip.background = element_blank(),
     strip.text = element_text(size = MY_FONT_SIZE_STRIP, 
                               margin = margin(2,0,2,0)),
-    axis.ticks.x = element_blank(),
+    axis.ticks.x = element_line(color = "gray90", linewidth = 0.25),
     axis.ticks.y = element_line(color = "gray90", linewidth = 0.25),
     axis.ticks.length = unit(-0.1, "cm"),
     axis.text = element_text(family = MY_FONT_FAMILY),
