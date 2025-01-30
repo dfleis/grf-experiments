@@ -117,7 +117,7 @@ my_labeller_trees <- function(df, x, y) {
 #----------------------------------------------------------------------
 #---------- DRAW PLOTS
 #----------------------------------------------------------------------
-MODEL_TYPE <- "vcm"
+MODEL_TYPE <- "hte"
 
 df_plt <- df_ratio %>% filter(model_type == MODEL_TYPE)
 
@@ -145,7 +145,7 @@ df_plt_adjusted <- df_plt %>%
 
 plt_bar <- df_plt_adjusted %>%
   ggplot(aes(x = K, y = ratio_from_one, fill = setting_id)) + 
-  geom_col(position = position_dodge(width = 0.3), width = 0.2) +
+  geom_col(position = position_dodge(width = 1), width = 0.9) +
   geom_hline(yintercept = 0, col = 'gray75', linewidth = 0.75, linetype = "solid") +
   labs(x = "Regressor dimension (K)", y = "Speedup factor", fill = legend_str) +
   ggtitle(title_str, subtitle = subtitle_str) + 
