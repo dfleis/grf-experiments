@@ -29,9 +29,9 @@ seed <- 1
 methods <- c("grad", "fpt2")
 
 # Data params
-Kvals <- c(4096, 1024, 256, 64, 16, 4)
+Kvals <- c(1024, 256, 64, 16, 4)
 pvals <- c(2, 5)
-nvals <- c(10000, 20000)
+nvals <- c(5000, 10000, 20000)
 
 
 prep_args_common <- function(X, method, stump, seed) {
@@ -166,7 +166,7 @@ for (i in 1:nrow(par_grid)) {
       
       bench::mark(
         multi_causal_tree_wrapper(prep_data),
-        min_iterations = 50
+        min_iterations = 25
       )
     },
     .quiet = BENCH_QUIET
