@@ -1,0 +1,3 @@
+"method","median","K","p","n","nt","model_type","setting_id","effect_type","prob_type","FUN"
+"grad",155.100244255038,256,5,10000,1000,"hte","3",2,1,"multi_arm_causal_forest"
+"fpt2",130.39431459608,256,5,10000,1000,"hte","3",2,1,"multi_arm_causal_forest"

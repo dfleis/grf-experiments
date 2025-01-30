@@ -1,0 +1,2 @@
+"K","p","n","nt","model_type","setting_id","effect_type","prob_type","FUN","grad","fpt2","fpt2_FACTOR"
+256,5,10000,1000,"hte","3",2,1,"multi_arm_causal_forest",155.100244255038,130.39431459608,1.1894709116382
