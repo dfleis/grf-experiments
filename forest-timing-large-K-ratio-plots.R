@@ -117,7 +117,7 @@ my_labeller_trees <- function(df, x, y) {
 #----------------------------------------------------------------------
 #---------- DRAW PLOTS
 #----------------------------------------------------------------------
-MODEL_TYPE <- "hte"
+MODEL_TYPE <- "vcm"
 
 df_plt <- df_ratio %>% filter(model_type == MODEL_TYPE)
 
@@ -162,5 +162,3 @@ plt_bar <- df_plt_adjusted %>%
 
 filename_plt_bar <- sprintf("figures/forest-timing-large-K-ratio-%s-bar.png", MODEL_TYPE)
 ggsave(filename_plt_bar, plot = plt_bar, width = 7, height = 2.5)
-
-plt_bar

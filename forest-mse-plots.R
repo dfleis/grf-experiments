@@ -4,8 +4,8 @@ library(gridExtra)
 library(scales)
 library(pals)
 
-#path <- "data/forest-mse/K4"
-path <- "data/forest-mse"
+path <- "data/forest-mse/K4"
+#path <- "data/forest-mse"
 basename_pattern_hte <- "forest-mse-avg_mse-hte-.*\\.csv"
 basename_pattern_vcm <- "forest-mse-avg_mse-vcm-.*\\.csv"
 

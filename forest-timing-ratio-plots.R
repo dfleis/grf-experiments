@@ -159,7 +159,7 @@ df_plt_adjusted <- df_plt %>%
 
 plt_bar <- df_plt_adjusted %>%
   ggplot(aes(x = K, y = ratio_from_one, fill = setting_id)) + 
-  geom_col(position = position_dodge(width = 0.6), width = 0.5) +
+  geom_col(position = position_dodge(width = 0.8), width = 0.7) +
   geom_hline(yintercept = 0, col = 'gray75', linewidth = 0.75, linetype = "solid") +
   labs(x = "Regressor dimension (K)", y = "Speedup factor", fill = legend_str) +
   ggtitle(title_str, subtitle = subtitle_str) + 

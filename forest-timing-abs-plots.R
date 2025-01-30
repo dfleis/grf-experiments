@@ -33,10 +33,10 @@ df_all <- list(df_list_hte, df_list_vcm) %>% # absolute time
 MY_FONT_FAMILY <- "sans"
 MY_FONT_FAMILY_MONO <- "mono"
 
-MY_FONT_SIZE <- 8
-MY_FONT_SIZE_AXIS_X <- 7
-MY_FONT_SIZE_AXIS_Y <- 5
-MY_FONT_SIZE_STRIP <- 6
+MY_FONT_SIZE <- 10
+MY_FONT_SIZE_AXIS_X <- 9
+MY_FONT_SIZE_AXIS_Y <- 7
+MY_FONT_SIZE_STRIP <- 8
 #MY_COLORS <- scales::hue_pal()(2) # methods
 MY_COLORS <- c("#4390e8", "#4cd461")
 
