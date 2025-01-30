@@ -68,7 +68,7 @@ my_theme <- function() {
 #----------------------------------------------------------------------
 #---------- DRAW PLOTS
 #----------------------------------------------------------------------
-MODEL_TYPE <- "vcm"
+MODEL_TYPE <- "hte"
 K_VAL <- 4
 N_VAL <- 20000
 
@@ -78,7 +78,7 @@ df_plt <- df_all %>% filter(model_type == MODEL_TYPE, K == K_VAL, n == N_VAL)
 model_label <- switch(MODEL_TYPE, 
                       "vcm" = "Varying coefficient model (VCM)", 
                       "hte" = "Heterogeneous treatment effects (HTE)")
-title_str <- sprintf("MSE estimates: %s", model_label)
+title_str <- sprintf("Number of splits per tree: %s", model_label)
 subtitle_str <- sprintf("5000 test observations, 40 replications\nK = %s, n = %s", K_VAL, N_VAL)
 
 plt <- df_plt %>%
