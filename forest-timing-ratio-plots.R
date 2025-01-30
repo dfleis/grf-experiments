@@ -116,7 +116,7 @@ my_labeller_trees <- function(df, x, y) {
 #----------------------------------------------------------------------
 #---------- DRAW PLOTS
 #----------------------------------------------------------------------
-MODEL_TYPE <- "hte"
+MODEL_TYPE <- "vcm"
 
 df_plt <- df_ratio %>% filter(model_type == MODEL_TYPE)
 
@@ -127,7 +127,7 @@ my_ylim <- switch(MODEL_TYPE,
 my_breaks <- pretty(seq(min(my_ylim), max(my_ylim), length.out = 5))
 
 #my_label_ypos <- switch(MODEL_TYPE, "vcm" = 1, "hte" = 1)
-my_label_np_ypos <- switch(MODEL_TYPE, "vcm" = 0.75, "hte" = 0.90)
+my_label_np_ypos <- switch(MODEL_TYPE, "vcm" = 0.72, "hte" = 0.90)
 my_label_trees_ypos <- switch(MODEL_TYPE, "vcm" = 3.05, "hte" = 1.60)
 my_model_colors <- switch(MODEL_TYPE, "vcm" = MY_COLORS[1:4], "hte" = MY_COLORS)
 
