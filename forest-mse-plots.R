@@ -4,7 +4,7 @@ library(gridExtra)
 library(scales)
 library(pals)
 
-path <- "local/data"
+path <- "data/forest-mse/K4"
 basename_pattern_hte <- "forest-mse-avg_mse-hte-.*\\.csv"
 basename_pattern_vcm <- "forest-mse-avg_mse-vcm-.*\\.csv"
 
@@ -69,15 +69,17 @@ my_theme <- function() {
 #---------- DRAW PLOTS
 #----------------------------------------------------------------------
 MODEL_TYPE <- "hte"
+K_VAL <- 4
+N_VAL <- 20000
 
-df_plt <- df_all %>% filter(model_type == MODEL_TYPE)
+df_plt <- df_all %>% filter(model_type == MODEL_TYPE, K == K_VAL, n == N_VAL)
 
 ### MODEL-SPECIFIC SETTINGS
 model_label <- switch(MODEL_TYPE, 
                       "vcm" = "Varying coefficient model (VCM)", 
                       "hte" = "Heterogeneous treatment effects (HTE)")
 title_str <- sprintf("MSE estimates: %s", model_label)
-subtitle_str <- "5000 test observations, 40 replications"
+subtitle_str <- sprintf("5000 test observations, 40 replications\nK = %s, n = %s", K_VAL, N_VAL)
 
 
 plt <- df_plt %>%
