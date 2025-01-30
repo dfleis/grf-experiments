@@ -68,7 +68,7 @@ my_theme <- function() {
 #----------------------------------------------------------------------
 #---------- DRAW PLOTS
 #----------------------------------------------------------------------
-MODEL_TYPE <- "hte"
+MODEL_TYPE <- "vcm"
 K_VAL <- 4
 N_VAL <- 20000
 
@@ -100,7 +100,7 @@ plt <- df_plt %>%
   scale_color_manual(values = MY_COLORS) +
   my_theme()
 
-filename_plt <- sprintf("figures/forest-mse-%s.png", MODEL_TYPE)
+filename_plt <- sprintf("figures/forest-mse-%s-%s-%s.png", MODEL_TYPE, K_VAL, N_VAL)
 ggsave(filename_plt, plot = plt, width = 7, height = 4)
 plt
 
