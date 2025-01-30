@@ -175,7 +175,6 @@ for (i in 1:nrow(par_grid)) {
   sim_times[[i]] <- bp %>%
     select(method, median, n_itr, nsplits = result) %>%
     mutate(K = K, p = p, n = n,
-           nt = nt,
            model_type = settings$model_type,
            setting_id = settings$setting_id,
            effect_type = settings$effect_type,
