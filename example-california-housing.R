@@ -166,7 +166,7 @@ seed <- 1
 num.threads <- NULL
 methods <- c("grad", "fpt1", "fpt2")
 num.trees <- 2000
-min.node.size <- 25
+min.node.size <- 5
 
 forests <- sapply(methods, function(method) {
   gc()
