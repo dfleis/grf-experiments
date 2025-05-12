@@ -17,11 +17,12 @@ run_and_log() {
     Rscript "$script" $MODEL $setting > "$logfile" 2>&1
 }
 
-# Run all MSE benchmarks with settings 1-4
+# Run all benchmarks with settings 1-4
 for setting in {1..4}; do
-    run_and_log "run-mse-forest-small.R" $setting
+    run_and_log "run-bench-tree-small.R" $setting
 done
 
 for setting in {1..4}; do
-    run_and_log "run-mse-forest.R" $setting
+    run_and_log "run-bench-tree.R" $setting
 done
+

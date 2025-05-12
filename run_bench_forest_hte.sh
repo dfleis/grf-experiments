@@ -1,6 +1,6 @@
 #! /bin/bash
 
-MODEL=vcm
+MODEL=hte
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
 # Create logs directory if it doesn't exist
@@ -17,11 +17,11 @@ run_and_log() {
     Rscript "$script" $MODEL $setting > "$logfile" 2>&1
 }
 
-# Run all MSE benchmarks with settings 1-4
-for setting in {1..4}; do
-    run_and_log "run-mse-forest-small.R" $setting
+# Run all benchmarks with settings 1-5
+for setting in {1..5}; do
+    run_and_log "run-bench-forest-small.R" $setting
 done
 
-for setting in {1..4}; do
-    run_and_log "run-mse-forest.R" $setting
+for setting in {1..5}; do
+    run_and_log "run-bench-forest.R" $setting
 done
