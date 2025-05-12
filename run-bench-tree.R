@@ -14,7 +14,7 @@ pvals <- c(2, 5)
 nvals <- as.integer(c(1e4, 5e4, 1e5, 5e5))
 
 stopifnot(model_type %in% c("vcm", "hte"))
-stopifnot(setting_id %in% c("1", "2", "3", "4", "5"))
+stopifnot(setting_ids %in% c("1", "2", "3", "4", "5"))
 
 methods <- c("grad", "fpt1", "fpt2")
 nrep <- 3
