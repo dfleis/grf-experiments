@@ -9,7 +9,7 @@
 # Generated on 2025-05-11 20:24 EDT
 ####################################################################################################
 #----- Load CRAN packages
-cat("Loaded utility packages:\n")
+cat("Loading utility packages:\n")
 suppressMessages(source("utils/utils-packages.R", print.eval = TRUE))
 
 #----- Load custom packages
@@ -18,7 +18,7 @@ if (!requireNamespace("rfg", quietly = TRUE)) {
   devtools::install_github("dfleis/rfg")
 }
 success.rfg <- require(rfg, quietly = TRUE)
-cat("Loaded `rfg`:", success.rfg, "\n")
+cat("Loaded `rfg`?", success.rfg, "\n")
 
 
 if (!requireNamespace("grf", quietly = TRUE)) {
@@ -26,7 +26,7 @@ if (!requireNamespace("grf", quietly = TRUE)) {
   devtools::install_github("dfleis/grf", subdir = "r-package/grf")
 }
 success.grf <- require(grf, quietly = TRUE)
-cat("Loaded `grf`:", success.grf, "\n")
+cat("Loaded `grf`?", success.grf, "\n")
 
 if (!requireNamespace("grf", quietly = TRUE)) {
   message("Something went wrong installing the FPT `grf` library...")
