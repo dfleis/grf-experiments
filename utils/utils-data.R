@@ -19,16 +19,16 @@ validate_model_type <- function(model_type) {
 #-------------------------------------------------------
 validate_setting <- function(model_type, setting_id) {
   # HTE Setting ID: Treatment effect function ID, treatment probability ID.
-  #   HTE 1: 1, 1
-  #   HTE 2: 1, 2
-  #   HTE 3: 2, 1
-  #   HTE 4: 3, 2
-  #   HTE 5: 4, 3
+  #   HTE 1: Effect 1, probability 1 -- linear, dense, unconfounded.
+  #   HTE 2: Effect 1, probability 2 -- linear, dense, confounded.
+  #   HTE 3: Effect 2, probability 1 -- nonlinear, sparse when dim(X) > 2, unconfounded.
+  #   HTE 4: Effect 3, probability 2 -- nonlinear, dense, confounded.
+  #   HTE 5: Effect 4, probability3 -- RFG.
   # VCM Setting ID: Effect function ID
-  #   VCM 1: 1
-  #   VCM 2: 2
-  #   VCM 3: 3 
-  #   VCM 4: 4 (RFG)
+  #   VCM 1: Effect 1 -- linear, dense.
+  #   VCM 2: Effect 2 -- nonlinear, sparse when dim(X) > 2.
+  #   VCM 3: Effect 3 -- nonlinear, dense.
+  #   VCM 4: Effect 4 -- RFG.
   model_type <- validate_model_type(model_type)
   
   effect_type <- setting_to_effect_type(model_type = model_type, setting_id = setting_id)

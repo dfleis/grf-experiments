@@ -16,7 +16,7 @@ local({
   install_and_load_packages <- function(pkgs) {
     for (pkg in pkgs) {
       if (!requireNamespace(pkg, quietly = TRUE)) {
-        message(paste("Installing package:", pkg))
+        message(paste("\tInstalling package:", pkg))
         install.packages(pkg, dependencies = TRUE)
       }
     }
