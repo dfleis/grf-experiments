@@ -17,7 +17,7 @@ stopifnot(model_type %in% c("vcm", "hte"))
 stopifnot(setting_ids %in% c("1", "2", "3", "4", "5"))
 
 methods <- c("grad", "fpt1", "fpt2")
-nrep <- 3
+nrep <- 1
 niter <- 5
 .quiet <- FALSE
 
