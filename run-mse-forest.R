@@ -25,7 +25,7 @@ settings <- validate_setting(model_type = model_type, setting_id = setting_id)
 
 #----- Data params
 Kvals <- c(4, 16, 64, 256)
-pvals <- c5
+pvals <- 5
 nvals <- as.integer(c(1e4, 2e4, 5e4, 1e5, 2e5))
 n_test <- 5000
 
