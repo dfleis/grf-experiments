@@ -17,7 +17,7 @@ suppressMessages(source("utils/utils-packages.R", print.eval = TRUE))
 message("Loading package `rfg`...")
 if (!requireNamespace("rfg", quietly = TRUE)) {
   message("\tInstalling package `rfg` from `github.com/dfleis/rfg`")
-  devtools::install_github("dfleis/rfg")
+  remotes::install_github("dfleis/rfg")
 }
 success.rfg <- require(rfg, quietly = TRUE)
 message("Successfully loaded `rfg`?\t", success.rfg)
@@ -26,7 +26,7 @@ message("Successfully loaded `rfg`?\t", success.rfg)
 message("Loading fork of `grf` with the FPT implementation...")
 if (!requireNamespace("grf", quietly = TRUE)) {
   message("\tInstalling package `grf` from `github.com/dfleis/grf`")
-  devtools::install_github("dfleis/grf", subdir = "r-package/grf")
+  remotes::install_github("dfleis/grf", subdir = "r-package/grf")
 }
 success.grf <- require(grf, quietly = TRUE)
 message("Successfully loaded `grf`?\t", success.grf)

@@ -1,11 +1,11 @@
 local({
   packages <- c(
-    "devtools",  # installing `dfleis/rfg` and the FPT version of `dfleis/grf`
     "mvtnorm",   # multivariate normal
     "bench",     # benchmarking
     "tidyr",     # data manipulation
     "dplyr",     # data manipulation
     "purrr",     # data manipulation
+    "remotes",   # installing `dfleis/rfg` and the FPT version of `dfleis/grf`
     # Below are optional tools used for creating the figures
     "ggplot2",   # (optional) visualization
     "ggh4x",     # (optional) visualization
