@@ -24,7 +24,7 @@ niter <- 5
 bench_tree(
   methods = methods,
   model_type = model_type,
-  setting_ids = setting_id,
+  setting_ids = setting_ids,
   stumps = stumps,
   Kvals = Kvals,
   pvals = pvals,
