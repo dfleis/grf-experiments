@@ -4,8 +4,8 @@
 
 Installation of this fork can be done through devtools
 ```R
-# install.packages("devtools")
-devtools::install_github("dfleis/grf", subdir = "r-package/grf")
+# install.packages("remotes")
+remotes::install_github("dfleis/grf", subdir = "r-package/grf")
 ```
 
 # Windows
