@@ -226,13 +226,15 @@ create_probs_funs <- function(prob_type, K, p) {
 #----- Data generation systems
 #-------------------------------------------------------
 generate_X <- function(n, p, theta = 0.3) {
-  #--- X ~ N_p(0, \Theta) where \Theta_{i,j} = \theta^{|i - j|}
+  #--- Generate correlated normal quantiles Z ~ N_p(0, \Theta) where \Theta_{i,j} = \theta^{|i - j|}
+  #--- then form covariates X from the normal copula such that X = (F(Z_1), F(Z_2), ..., F(Z_p))
   #X <- matrix(runif(n * p, 0, 1), nrow = n)
   Theta <- theta^abs(outer(1:p, 1:p, function(i, j) {i - j}))
-  X <- mvtnorm::rmvnorm(n, mean = rep(0, p), sigma = Theta)
+  X <- apply(mvtnorm::rmvnorm(n, mean = rep(0, p), sigma = Theta), 2, pnorm)
   colnames(X) <- paste0("X", 1:p)
   return (X)
 }
+
 generate_W_vcm <- function(n, K, x, mu = NULL, SIGMA = NULL, ...) {
   # Regressors W for (general) varying coefficient models. 
   # For VCM models, W is a K-dimensional random variable,
