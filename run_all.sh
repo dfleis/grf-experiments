@@ -13,12 +13,12 @@ chmod +x run_mse_hte.sh
 chmod +x run_mse_vcm.sh
 
 # Run all scripts in sequence
-echo "Running tree VCM benchmarks..."
-./run_bench_tree_vcm.sh
-echo
-
 echo "Running tree HTE benchmarks..."
 ./run_bench_tree_hte.sh
+echo
+
+echo "Running tree VCM benchmarks..."
+./run_bench_tree_vcm.sh
 echo
 
 echo "Running forest HTE benchmarks..."
