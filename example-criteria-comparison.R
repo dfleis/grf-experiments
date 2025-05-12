@@ -84,8 +84,8 @@ rho.grad <- -t(t(xi) %*% A.Pinv %*% t(psi.P))
 rho.FPT <- 1 * t(t(xi) %*% t(psi.P))
 
 thresholds <- X[-length(X),] + diff(X)/2
-thresholds <- tail(head(thresholds, -100),-100)
-thresholds <- thresholds[seq(1, length(thresholds), by = 50)]
+thresholds <- tail(head(thresholds, -50),-50)
+thresholds <- thresholds[seq(1, length(thresholds), by = 10)]
 
 idx <- lapply(thresholds, function(thresh) X <= thresh)
 C.list <- lapply(idx, function(i) list(C1 = which(i), C2 = which(!i)))
