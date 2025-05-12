@@ -9,26 +9,27 @@
 # Generated on 2025-05-11 20:24 EDT
 ####################################################################################################
 #----- Load CRAN packages
-cat("Loading utility packages:\n")
+message("Loading utility packages...")
 suppressMessages(source("utils/utils-packages.R", print.eval = TRUE))
 
 #----- Load custom packages
-### Random function generator for simulation settings 4 (VCM) and 5 (HTE)
-cat("Loading package `rfg` (bespoke random function generator factory):\n")
+### Load random function generator package for settings 4 (VCM) and 5 (HTE)
+message("Loading package `rfg`...")
 if (!requireNamespace("rfg", quietly = TRUE)) {
-  message(paste("Installing package `rfg` from `github.com/dfleis/rfg`"))
+  message("\tInstalling package `rfg` from `github.com/dfleis/rfg`")
   devtools::install_github("dfleis/rfg")
 }
 success.rfg <- require(rfg, quietly = TRUE)
-cat("Successfully loaded `rfg`?", success.rfg, "\n")
+message("Successfully loaded `rfg`?\t", success.rfg)
 
-### Fork of grf with the FPT method
+### Load the fork of `grf` with the FPT method
+message("Loading fork of `grf` with the FPT implementation...")
 if (!requireNamespace("grf", quietly = TRUE)) {
-  message(paste("Installing package `grf` from `github.com/dfleis/grf`"))
+  message("\tInstalling package `grf` from `github.com/dfleis/grf`")
   devtools::install_github("dfleis/grf", subdir = "r-package/grf")
 }
 success.grf <- require(grf, quietly = TRUE)
-cat("Successfully loaded `grf`?", success.grf, "\n")
+message("Successfully loaded `grf`?\t", success.grf)
 
 ### Verify the correct version of `grf` occupies the `grf` namespace
 if (!requireNamespace("grf", quietly = TRUE)) {
