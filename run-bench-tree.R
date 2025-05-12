@@ -3,8 +3,8 @@ seed <- 1
 FILENAME_HEAD <- "bench-tree"
 
 args <- commandArgs(TRUE)
-model_type <- args[1] # "vcm" or "hte"
-setting_id <- args[2] # "1", "2", "3", "4", "5"
+model_type  <- args[1] # "vcm" or "hte"
+setting_ids <- args[2] # "1", "2", "3", "4", "5"
 
 # model_type <- "vcm"
 # setting_ids <- c(1, 2, 3, 4)
