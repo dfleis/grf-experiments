@@ -1,7 +1,0 @@
-"method","median","K","p","n","nt","model_type","setting_id","effect_type","prob_type","FUN"
-"grad",60.1112919721054,256,5,10000,100,"vcm","3",3,NA,"lm_forest"
-"fpt2",28.9432265511714,256,5,10000,100,"vcm","3",3,NA,"lm_forest"
-"grad",150.992260380066,256,5,10000,250,"vcm","3",3,NA,"lm_forest"
-"fpt2",73.3109113861574,256,5,10000,250,"vcm","3",3,NA,"lm_forest"
-"grad",314.251836937037,256,5,10000,500,"vcm","3",3,NA,"lm_forest"
-"fpt2",142.509934103,256,5,10000,500,"vcm","3",3,NA,"lm_forest"

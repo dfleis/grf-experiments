@@ -3,9 +3,7 @@
 .Rhistory
 
 # directories
-old/scrap/
 logs/
-local/
 
 *.err
 *.out

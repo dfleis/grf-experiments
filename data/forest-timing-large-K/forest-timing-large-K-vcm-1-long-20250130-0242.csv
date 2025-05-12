@@ -1,3 +1,0 @@
-"method","median","K","p","n","nt","model_type","setting_id","effect_type","prob_type","FUN"
-"grad",663.400804669131,256,5,10000,1000,"vcm","1",1,NA,"lm_forest"
-"fpt2",292.854860747,256,5,10000,1000,"vcm","1",1,NA,"lm_forest"
