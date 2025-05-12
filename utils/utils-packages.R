@@ -2,6 +2,7 @@ local({
   packages <- c(
     "mvtnorm",   # multivariate normal
     "bench",     # benchmarking
+    "utf8",      # output
     "tidyr",     # data manipulation
     "dplyr",     # data manipulation
     "purrr",     # data manipulation
