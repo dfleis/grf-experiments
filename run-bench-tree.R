@@ -10,7 +10,7 @@ setting_ids <- args[2] # "1", "2", "3", "4", "5"
 # setting_ids <- c(1, 2, 3, 4)
 stumps <- c(TRUE, FALSE)
 Kvals <- c(4, 16, 64, 256)
-pvals <- 2
+pvals <- 5
 nvals <- as.integer(c(1e4, 2e4, 1e5, 2e5))
 
 stopifnot(model_type %in% c("vcm", "hte"))
