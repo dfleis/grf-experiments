@@ -84,7 +84,7 @@ rho.grad <- -t(t(xi) %*% A.Pinv %*% t(psi.P))
 rho.FPT <- 1 * t(t(xi) %*% t(psi.P))
 
 thresholds <- X[-length(X),] + diff(X)/2
-thresholds <- tail(head(thresholds, -50),-50)
+thresholds <- tail(head(thresholds, -100),-100)
 thresholds <- thresholds[seq(1, length(thresholds), by = 10)]
 
 idx <- lapply(thresholds, function(thresh) X <= thresh)
@@ -165,16 +165,16 @@ plt <- ggplot(df.Delta, aes(x = threshold, y = Delta, color = id)) +
   geom_vline(xintercept = 0, linewidth = 1, color = "gray85") + 
   geom_hline(yintercept = 0, linewidth = 1, color = "gray85") + 
   geom_vline(xintercept = thresholds[which.max(Delta)], linewidth = 0.5, color = "gray50", lty = "dashed") + 
-  geom_line(linewidth = 1.5) + 
-  annotate("point", x = Delta.max["x", "target"], y = Delta.max["y", "target"], color = ggplot2::alpha(my.cols[1], 0.75), size = 3) + 
-  annotate("point", x = Delta.max["x", "grad"], y = Delta.max["y", "grad"], color = ggplot2::alpha(my.cols[2], 0.75), size = 3) + 
-  annotate("point", x = Delta.max["x", "FPT"], y = Delta.max["y", "FPT"], color = ggplot2::alpha(my.cols[3], 0.75), size = 3) + 
-  annotate("point", x = Delta.max["x", "FPT2"], y = Delta.max["y", "FPT2"], color = ggplot2::alpha(my.cols[4], 0.75), size = 3) + 
+  geom_line(linewidth = 0.85) + 
+  annotate("point", x = Delta.max["x", "target"], y = Delta.max["y", "target"], color = ggplot2::alpha(my.cols[1], 0.75), size = 2) + 
+  annotate("point", x = Delta.max["x", "grad"], y = Delta.max["y", "grad"], color = ggplot2::alpha(my.cols[2], 0.75), size = 2) + 
+  annotate("point", x = Delta.max["x", "FPT"], y = Delta.max["y", "FPT"], color = ggplot2::alpha(my.cols[3], 0.75), size = 2) + 
+  annotate("point", x = Delta.max["x", "FPT2"], y = Delta.max["y", "FPT2"], color = ggplot2::alpha(my.cols[4], 0.75), size = 2) + 
   scale_color_manual(
     values = my.cols,
     labels = expression(Delta, 
                         tilde(Delta)^{grad}, 
-                        tilde(Delta)[1]^{FPT}, 
+                        tilde(Delta)[1]^{FPT}~eta~"="~1, 
                         tilde(Delta)[2]^{FPT}~eta~"="~sqrt(2))) + 
   theme_minimal() +
   theme(
@@ -182,8 +182,8 @@ plt <- ggplot(df.Delta, aes(x = threshold, y = Delta, color = id)) +
     legend.text = element_text(size = 12),
     legend.title = element_blank(),
     legend.position = "inside",
-    legend.position.inside = c(0.2,0.8)
+    legend.position.inside = c(0.185,0.75)
   )
-pdf("figures/example-criteria-comparison.pdf", width = 7, height = 6)
+pdf("figures/example-criteria-comparison.pdf", width = 5.5, height = 3.5)
 plt
 dev.off()
