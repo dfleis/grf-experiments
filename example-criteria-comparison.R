@@ -160,7 +160,7 @@ plt <- ggplot(df.Delta, aes(x = threshold, y = Delta, color = id)) +
        x = expression("Threshold "*italic(t))) +
   ggtitle(expression("Criterion values"~Delta*"("*phantom("")*italic(C)[1]*","*italic(C)[2]*")"~"over candidate splits"~"{"*phantom("")*italic(C)[1]*","*italic(C)[2]*"}"),
           subtitle = expression(
-            "\t"~italic(C)[1]~"= {"*phantom("")*italic(X)[italic(i)]*" : "*italic(X)[italic(i)]*" <= "*italic(t)*"}"~"and"~italic(C)[2]~"= {"*phantom("")*italic(X)[italic(i)]*" : "*italic(X)[italic(i)]*" > "*italic(t)*"}")
+            "\t"~italic(C)[1]~"= {"*phantom("")*italic(X)[italic(i)]*" : "*italic(X)[italic(i)] <= italic(t)*"}"~"and"~italic(C)[2]~"= {"*phantom("")*italic(X)[italic(i)]*" : "*italic(X)[italic(i)]*" > "*italic(t)*"}")
   ) + 
   geom_vline(xintercept = 0, linewidth = 1, color = "gray85") + 
   geom_hline(yintercept = 0, linewidth = 1, color = "gray85") + 
