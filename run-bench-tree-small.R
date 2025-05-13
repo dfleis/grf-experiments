@@ -18,7 +18,7 @@ stopifnot(setting_ids %in% c("1", "2", "3", "4", "5"))
 
 methods <- c("grad", "fpt1", "fpt2")
 nrep <- 1
-niter <- 5
+niter <- 3
 .quiet <- FALSE
 
 bench_tree(

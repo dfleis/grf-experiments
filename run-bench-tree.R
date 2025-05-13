@@ -10,15 +10,15 @@ setting_ids <- args[2] # "1", "2", "3", "4", "5"
 # setting_ids <- c(1, 2, 3, 4)
 stumps <- c(TRUE, FALSE)
 Kvals <- c(4, 16, 64, 256)
-pvals <- 5
-nvals <- as.integer(c(1e4, 2e4, 5e4, 1e5, 2e5))
+pvals <- 2
+nvals <- as.integer(c(1e4, 2e4, 1e5, 2e5))
 
 stopifnot(model_type %in% c("vcm", "hte"))
 stopifnot(setting_ids %in% c("1", "2", "3", "4", "5"))
 
 methods <- c("grad", "fpt1", "fpt2")
 nrep <- 1
-niter <- 5
+niter <- 3
 .quiet <- FALSE
 
 bench_tree(

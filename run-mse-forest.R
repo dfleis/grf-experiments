@@ -25,13 +25,13 @@ settings <- validate_setting(model_type = model_type, setting_id = setting_id)
 
 #----- Data params
 Kvals <- c(4, 16, 64, 256)
-pvals <- 5
-nvals <- as.integer(c(1e4, 2e4, 5e4, 1e5, 2e5))
+pvals <- 2
+nvals <- as.integer(c(1e4, 2e4, 1e5, 2e5))
 n_test <- 5000
 
 #----- GRF parameters
+num_trees <- c(100, 250, 500)
 methods <- c("grad", "fpt1", "fpt2")
-num_trees <- c(100, 500, 1000)
 
 # Global GRF arguments
 grf_args_global <- list(

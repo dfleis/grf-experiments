@@ -13,7 +13,7 @@ stumps <- c(TRUE, FALSE)
 Kvals <- c(4, 16)
 pvals <- 2
 nvals <- as.integer(c(1000, 2000, 4000))
-numtreevals <- c(100, 500, 1000)
+numtreevals <- c(100, 250, 500)
 
 stopifnot(model_type %in% c("vcm", "hte"))
 stopifnot(setting_ids %in% c("1", "2", "3", "4", "5"))
@@ -21,7 +21,7 @@ stopifnot(setting_ids %in% c("1", "2", "3", "4", "5"))
 methods <- c("grad", "fpt1", "fpt2")
 center_data <- TRUE
 nrep <- 1
-niter <- 5
+niter <- 3
 .quiet <- FALSE
 
 grf_args_global <- list(
