@@ -30,7 +30,7 @@ nvals <- as.integer(c(1000, 2000, 4000))
 n_test <- 5000
 
 #----- GRF parameters
-num_trees <- c(100, 250, 500)
+num_trees <- c(100, 500, 1000)
 methods <- c("grad", "fpt1", "fpt2")
 
 # Global GRF arguments

@@ -24,13 +24,13 @@ stopifnot(setting_id %in% c("1", "2", "3", "4", "5"))
 settings <- validate_setting(model_type = model_type, setting_id = setting_id)
 
 #----- Data params
-Kvals <- c(4, 16, 64, 256)
+Kvals <- c(4, 256)
 pvals <- 5
-nvals <- as.integer(c(1e4, 2e4, 1e5, 2e5))
+nvals <- as.integer(c(1e4, 2e4, 1e5))
 n_test <- 5000
 
 #----- GRF parameters
-num_trees <- c(100, 250, 500)
+num_trees <- c(100)
 methods <- c("grad", "fpt1", "fpt2")
 
 # Global GRF arguments
