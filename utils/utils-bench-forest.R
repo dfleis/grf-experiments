@@ -92,21 +92,20 @@ bench_forest_pars <- function(methods, model_type,
 #----- Core bench function
 #--------------------------------------------------
 bench_forest <- function(methods, model_type, 
-                         setting_ids, numtreevals, Kvals, pvals, nvals, 
+                         setting_id, numtreevals, Kvals, pvals, nvals, 
                          center_data = FALSE, grf_args = NULL, 
                          nrep, niter, seed = NULL,
                          path = "data", filename_head = "bench-forest", 
                          .add_col = NULL,
                          .quiet = TRUE) {
-  setting_ids <- sapply(setting_ids, function(setting_id) 
-    validate_setting(model_type, setting_id)$setting_id)
+  setting_id <- validate_setting(model_type, setting_id)$setting_id
   
   pars_grid <- expand.grid(
     K = sort(Kvals, decreasing = T),
     p = sort(pvals, decreasing = T), 
     n = nvals,#sort(nvals, decreasing = T),
     num.trees = sort(numtreevals, decreasing = T),
-    setting_id = setting_ids
+    setting_id = setting_id
   )
   
   file_dir <- sprintf("%s/%s-%s-%s", path, filename_head, nrep, niter)
@@ -114,8 +113,10 @@ bench_forest <- function(methods, model_type,
 
   t0 <- Sys.time()
   for (i in 1:nrow(pars_grid)) {
+    
     pars <- pars_grid[i,]
-    pars_str <- with(pars, paste(c(model_type, setting_id, num.trees, as.integer(K), as.integer(p), as.integer(n)), collapse = "-"))
+    pars_str <- paste(c(model_type, setting_id, as.integer(pars$num.trees), as.integer(pars$K), 
+                        as.integer(pars$p), as.integer(pars$n)), collapse = "-")
     # file_dir/filename_head-[NREPS]-[NITERS]-{VARLABEL}-[MODEL]-[SETTING]-[NUM.TREES]-[K]-[p]-[n].csv
     make_filename <- function(LABEL) {
       sprintf("%s/%s-%s-%s-%s-%s.csv", file_dir, 
@@ -155,52 +156,3 @@ bench_forest <- function(methods, model_type,
   cat(sprintf("Benchmark iterations niter = %s\n", niter))
   cat("Total elapsed time:", format(difftime(Sys.time(), t0)), "\n")
 }
-
-
-#--------------------------------------------------
-#----- Example usage
-#--------------------------------------------------
-# NUM_THREADS <- 1
-# model_type <- "vcm"
-# numtreevals <- c(1, 10, 100)
-# setting_ids <- c(1, 2, 3)
-# Kvals <- c(4, 8, 16, 32, 64, 128, 256)
-# pvals <- c(2, 4, 8)
-# nvals <- c(2500, 5000)
-# 
-# methods <- c("grad", "fpt1", "fpt2")
-# center_data <- TRUE
-# nrep <- 3
-# niter <- 3
-# seed <- 1
-# .quiet <- TRUE
-# 
-# grf_args_global <- list(
-#   min.node.size = 5,
-#   sample.fraction = 0.5,
-#   honesty = TRUE,
-#   honesty.fraction = 0.5,
-#   honesty.prune.leaves = TRUE,
-#   alpha = 0.05,
-#   ci.group.size = 1,
-#   compute.oob.predictions = FALSE,
-#   num.threads = NUM_THREADS,
-#   seed = seed
-# )
-# 
-# bench_forest(
-#   methods = methods,
-#   model_type = model_type,
-#   setting_ids = setting_ids,
-#   numtreevals = numtreevals,
-#   Kvals = Kvals,
-#   pvals = pvals,
-#   nvals = nvals,
-#   center_data = center_data,
-#   grf_args = grf_args_global,
-#   nrep = nrep,
-#   niter = niter,
-#   seed = seed,
-#   .quiet = .quiet
-# )
-

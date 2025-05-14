@@ -4,11 +4,11 @@ FILENAME_HEAD <- "bench-forest-small"
 NUM_THREADS <- 1
 
 args <- commandArgs(TRUE)
-model_type  <- args[1] # "vcm" or "hte"
-setting_ids <- args[2] # "1", "2", "3", "4", "5"
+model_type <- args[1] # "vcm" or "hte"
+setting_id <- args[2] # "1", "2", "3", "4", "5"
 
 # model_type <- "vcm"
-# setting_ids <- c(1, 2, 3, 4)
+# setting_id <- c(1, 2, 3, 4)
 stumps <- c(TRUE, FALSE)
 Kvals <- c(4, 16)
 pvals <- 2
@@ -16,7 +16,7 @@ nvals <- as.integer(c(1000, 2000, 4000))
 numtreevals <- c(100, 250, 500)
 
 stopifnot(model_type %in% c("vcm", "hte"))
-stopifnot(setting_ids %in% c("1", "2", "3", "4", "5"))
+stopifnot(setting_id %in% c("1", "2", "3", "4", "5"))
 
 methods <- c("grad", "fpt1", "fpt2")
 center_data <- TRUE
@@ -40,7 +40,7 @@ grf_args_global <- list(
 bench_forest(
   methods = methods,
   model_type = model_type,
-  setting_ids = setting_ids,
+  setting_id = setting_id,
   numtreevals = numtreevals,
   Kvals = Kvals,
   pvals = pvals,

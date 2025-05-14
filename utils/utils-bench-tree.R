@@ -140,7 +140,6 @@ prep_data <- function(data_args, method, stump, forest_seed) {
   # doing timing tests then it makes more sense to just disable centering.
   model_type <- validate_model_type(data_args$model_type)
   data <- do.call(generate_data, data_args)
-  
   prep_args <- list(data = data, method = method, stump = stump, seed = forest_seed)
   
   prep_FUN <- if (model_type == "vcm") {
@@ -213,20 +212,19 @@ bench_tree_pars <- function(methods, model_type, stump,
 #--------------------------------------------------
 #----- Core bench function
 #--------------------------------------------------
-bench_tree <- function(methods, model_type, setting_ids, 
+bench_tree <- function(methods, model_type, setting_id, 
                        stumps = c(TRUE, FALSE), Kvals, pvals, nvals, 
                        nrep, niter, seed = NULL,
                        path = "data", filename_head = "bench-tree", 
                        .quiet = TRUE) {
-  setting_ids <- sapply(setting_ids, function(setting_id) 
-    validate_setting(model_type, setting_id)$setting_id)
+  setting_id <- validate_setting(model_type, setting_id)$setting_id
   
   pars_grid <- expand.grid(
     K = sort(Kvals, decreasing = T),
     p = sort(pvals, decreasing = T), 
     n = sort(nvals, decreasing = T),
     stump = stumps,
-    setting_id = setting_ids
+    setting_id = setting_id
   )
   
   file_dir <- sprintf("%s/%s-%s-%s", path, filename_head, nrep, niter)
@@ -235,15 +233,15 @@ bench_tree <- function(methods, model_type, setting_ids,
   t0 <- Sys.time()
   for (i in 1:nrow(pars_grid)) {
 
-    
     pars <- pars_grid[i,]
-    pars_str <- with(pars, paste(c(model_type, setting_id, stump, as.integer(K), as.integer(p), as.integer(n)), collapse = "-"))
+    pars_str <- paste(c(model_type, setting_id, pars$stump, as.integer(pars$K), 
+                        as.integer(pars$p), as.integer(pars$n)), collapse = "-")
     # file_dir/filename_head-[NREPS]-[NITERS]-[MODEL]-[SETTING]-[STUMP]-[K]-[p]-[n].csv
-    filename <- sprintf("%s/%s-%s-%s-%s.csv", file_dir, filename_head, 
-                        nrep, niter, pars_str)
+    filename_str <- sprintf("%s/%s-%s-%s-%s.csv", file_dir, filename_head, 
+                            nrep, niter, pars_str)
     
     cat(format(Sys.time(), "%Y-%m-%d %H:%M:%S %Z"), "::", 
-        i, "of", nrow(pars_grid), "::", filename, "\n")
+        i, "of", nrow(pars_grid), "::", filename_str, "\n")
     
     #gc(); Sys.sleep(1)
     
@@ -258,7 +256,7 @@ bench_tree <- function(methods, model_type, setting_ids,
       .quiet = .quiet
     )
     
-    write.csv(res, file = filename, row.names = FALSE)
+    write.csv(res, file = filename_str, row.names = FALSE)
   }
   
   cat(sprintf("Benchmark complete for model_type = %s with\n", model_type))
@@ -269,35 +267,4 @@ bench_tree <- function(methods, model_type, setting_ids,
   cat(sprintf("Benchmark iterations niter = %s\n", niter))
   cat("Total elapsed time:", format(difftime(Sys.time(), t0)), "\n")
 }
-
-#--------------------------------------------------
-#----- Example usage
-#--------------------------------------------------
-# model_type <- "vcm"
-# stumps <- c(TRUE, FALSE)
-# setting_ids <- c(1, 2, 3)
-# Kvals <- c(2, 4, 8, 16, 32, 64, 128, 256)
-# pvals <- c(2, 4)
-# nvals <- c(1000, 5000)
-# 
-# methods <- c("grad", "fpt1", "fpt2")
-# nrep <- 3
-# niter <- 3
-# seed <- 1
-# .quiet <- TRUE
-# 
-# bench_tree(
-#   methods = methods,
-#   model_type = model_type,
-#   setting_ids = setting_ids,
-#   stumps = stumps,
-#   Kvals = Kvals,
-#   pvals = pvals,
-#   nvals = nvals,
-#   nrep = nrep,
-#   niter = niter,
-#   seed = seed,
-#   .quiet = .quiet
-# )
-
 
