@@ -12,7 +12,7 @@ setting_id <- args[2] # "1", "2", "3", "4", "5"
 stumps <- c(TRUE, FALSE)
 Kvals <- c(4, 16, 64, 256)
 pvals <- 5
-nvals <- as.integer(c(1e4, 2e4, 1e5))
+nvals <- as.integer(c(1e4, 2e4, 1e5, 2e5))
 numtreevals <- c(100, 250, 500)
 
 stopifnot(model_type %in% c("vcm", "hte"))

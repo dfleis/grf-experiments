@@ -21,7 +21,7 @@ stopifnot(setting_id %in% c("1", "2", "3", "4", "5"))
 methods <- c("grad", "fpt1", "fpt2")
 center_data <- TRUE
 nrep <- 1
-niter <- 3
+niter <- 10
 .quiet <- FALSE
 
 grf_args_global <- list(
