@@ -2,7 +2,7 @@
 
 ## Unix-based systems
 
-Installation of this fork can be done through devtools
+Installation of our fork of `grf` that implements the fixed-point tree algorithm can be done through the `remotes` or `devtools` libraries:
 ```R
 # install.packages("remotes")
 remotes::install_github("dfleis/grf", subdir = "r-package/grf")
