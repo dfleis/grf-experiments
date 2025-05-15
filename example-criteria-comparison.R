@@ -52,12 +52,12 @@ A_FUN <- function(wmat) -crossprod(cbind(1, wmat))/nrow(wmat)
 #----- Generate data
 #--------------------------------------------------
 set.seed(1)
-n <- 5000
+n <- 1000
 K <- 2
-sig.eps <- 0.25
+sig.eps <- 0.5
 sig.W <- 1
 
-eta.new <- sqrt(3/2)
+eta.new <- 1/sqrt(2)
 
 #--- "Selector" matrix such that \xi^\top (nu, \theta_1, \theta_2) = (\theta_1, \theta_2)
 xi <- diag(c(0, rep(1, K)), nrow = K + 1, ncol = K + 1)[,-1]
@@ -84,8 +84,8 @@ rho.grad <- -t(t(xi) %*% A.Pinv %*% t(psi.P))
 rho.FPT <- 1 * t(t(xi) %*% t(psi.P))
 
 thresholds <- X[-length(X),] + diff(X)/2
-thresholds <- tail(head(thresholds, -50),-50)
-thresholds <- thresholds[seq(1, length(thresholds), by = 10)]
+thresholds <- tail(head(thresholds, -3),-3)
+thresholds <- thresholds[seq(1, length(thresholds), by = 3)]
 
 idx <- lapply(thresholds, function(thresh) X <= thresh)
 C.list <- lapply(idx, function(i) list(C1 = which(i), C2 = which(!i)))
@@ -120,7 +120,7 @@ thetatilde.C2.FPT  <- t(theta.fits$tilde.FPT[,"C2",])
 thetatilde.C2.FPT2 <- t(theta.fits$tilde.FPT2[,"C2",])
 
 #--- Compute criteria and maximizing indices
-crit.coef <- sapply(C.list, function(splits) length(splits$C1) * length(splits$C1)/n^2)
+crit.coef <- sapply(C.list, function(splits) length(splits$C1) * length(splits$C2)/n^2)
 Delta <- crit.coef * apply(thetahat.C1 - thetahat.C2, 1, function(x) sum(x^2))
 Deltatilde.grad <- crit.coef * apply(thetatilde.C1.grad - thetatilde.C2.grad, 1, function(x) sum(x^2))
 Deltatilde.FPT  <- crit.coef * apply(thetatilde.C1.FPT - thetatilde.C2.FPT, 1, function(x) sum(x^2))
@@ -165,27 +165,27 @@ plt <- ggplot(df.Delta, aes(x = threshold, y = Delta, color = id)) +
   geom_vline(xintercept = 0, linewidth = 1, color = "gray85") + 
   geom_hline(yintercept = 0, linewidth = 1, color = "gray85") + 
   geom_vline(xintercept = thresholds[which.max(Delta)], linewidth = 0.5, color = my.cols[1]) + 
-  geom_vline(xintercept = thresholds[which.max(Deltatilde.grad)], linewidth = 0.5, color = my.cols[2]) +
-  geom_vline(xintercept = thresholds[which.max(Deltatilde.FPT)], linewidth = 0.5, color = my.cols[3]) + 
-  geom_vline(xintercept = thresholds[which.max(Deltatilde.FPT2)], linewidth = 0.5, color = my.cols[4]) + 
+  geom_vline(xintercept = thresholds[which.max(Deltatilde.grad)], linetype = "solid", linewidth = 0.5, color = my.cols[2]) +
+  geom_vline(xintercept = thresholds[which.max(Deltatilde.FPT)], linetype = "dashed", linewidth = 0.5, color = my.cols[3]) + 
+  geom_vline(xintercept = thresholds[which.max(Deltatilde.FPT2)], linetype = "dotted", linewidth = 0.5, color = my.cols[4]) + 
   geom_line(linewidth = 0.9) + 
-  annotate("point", x = Delta.max["x", "target"], y = Delta.max["y", "target"], color = ggplot2::alpha(my.cols[1], 0.75), size = 2) + 
-  annotate("point", x = Delta.max["x", "grad"], y = Delta.max["y", "grad"], color = ggplot2::alpha(my.cols[2], 0.75), size = 2) + 
-  annotate("point", x = Delta.max["x", "FPT"], y = Delta.max["y", "FPT"], color = ggplot2::alpha(my.cols[3], 0.75), size = 2) + 
-  annotate("point", x = Delta.max["x", "FPT2"], y = Delta.max["y", "FPT2"], color = ggplot2::alpha(my.cols[4], 0.75), size = 2) + 
+  annotate("point", x = Delta.max["x", "target"], y = Delta.max["y", "target"], color = ggplot2::alpha(my.cols[1], 0.75), size = 2.5) + 
+  annotate("point", x = Delta.max["x", "grad"], y = Delta.max["y", "grad"], color = ggplot2::alpha(my.cols[2], 0.75), size = 2.5) + 
+  annotate("point", x = Delta.max["x", "FPT"], y = Delta.max["y", "FPT"], color = ggplot2::alpha(my.cols[3], 0.75), size = 2.5) + 
+  annotate("point", x = Delta.max["x", "FPT2"], y = Delta.max["y", "FPT2"], color = ggplot2::alpha(my.cols[4], 0.75), size = 2.5) + 
   scale_color_manual(
     values = my.cols,
     labels = expression(Delta, 
                         tilde(Delta)^{grad}, 
                         tilde(Delta)[1]^{FPT}~eta~"="~1, 
-                        tilde(Delta)[2]^{FPT}~eta~"="~sqrt(3/2))) + 
+                        tilde(Delta)[2]^{FPT}~eta~"="~1/sqrt(2))) + 
   theme_minimal() +
   theme(
     panel.border = element_rect(fill = NA),
     legend.text = element_text(size = 12),
     legend.title = element_blank(),
     legend.position = "inside",
-    legend.position.inside = c(0.185,0.75)
+    legend.position.inside = c(0.185,0.79)
   )
 pdf("figures/example-criteria-comparison.pdf", width = 5.5, height = 4)
 plt
