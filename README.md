@@ -1,4 +1,4 @@
-# Installation Instructions
+# Build Instructions
 
 ## Unix-based systems
 
