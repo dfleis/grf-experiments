@@ -76,7 +76,8 @@ bench_forest_pars <- function(methods, model_type,
         do.call(grf_FUN$FUN, grf_bench_args), 
         iterations = niter,
         min_time = Inf,
-        filter_gc = FALSE
+        filter_gc = FALSE,
+        memory = FALSE
       )
     },
     .quiet = .quiet
