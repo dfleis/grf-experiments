@@ -17,11 +17,11 @@ run_and_log() {
     Rscript "$script" $MODEL $setting > "$logfile" 2>&1
 }
 
-# Run all benchmarks with settings 1-4
-for setting in {1..4}; do
-    run_and_log "run-bench-forest-small-FORK.R" $setting
-done
-
+## Run all benchmarks with settings 1-4
 #for setting in {1..4}; do
-#    run_and_log "run-bench-forest-FORK.R" $setting
+#    run_and_log "run-bench-forest-small-FORK.R" $setting
 #done
+
+for setting in {1..4}; do
+    run_and_log "run-bench-forest-FORK.R" $setting
+done

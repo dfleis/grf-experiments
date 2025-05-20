@@ -18,10 +18,10 @@ run_and_log() {
 }
 
 # Run all benchmarks with settings 1-5
-for setting in {1..5}; do
-    run_and_log "run-bench-forest-small-FORK.R" $setting
-done
-
 #for setting in {1..5}; do
-#    run_and_log "run-bench-forest-FORK.R" $setting
+#    run_and_log "run-bench-forest-small-FORK.R" $setting
 #done
+
+for setting in {1..5}; do
+    run_and_log "run-bench-forest-FORK.R" $setting
+done
