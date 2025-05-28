@@ -133,9 +133,10 @@ my_labeller_p <- function(df, x, y) {
 #---------- DRAW PLOTS
 #----------------------------------------------------------------------
 MODEL_TYPE <- "vcm"
-K_FILTER <- c(4, 16, 64, 256)
-n_FILTER <- c("10000", "100000")
-num.trees_FILTER <- c("100")
+
+K_FILTER <- c(4, 16, 64, 256) # K = 4, 16, 64, 256
+n_FILTER <- c("10000", "20000", "100000") # n = 100000, 20000, 100000
+num.trees_FILTER <- c("100") # num.trees = 100
 
 df_plt <- df_ratio %>%
   filter(
@@ -161,7 +162,7 @@ my_breaks <- pretty(seq(min(my_ylim), max(my_ylim), length.out = 5))
 my_label_p_ypos <- switch(MODEL_TYPE, "vcm" = 0.8, "hte" = 0.95)
 my_model_colors <- switch(MODEL_TYPE, "vcm" = MY_COLORS[1:4], "hte" = MY_COLORS)
 
-title_str <- "Forest fit time speedup factor: GRF-grad time/GRF-FPT time"
+title_str <- "Fit time speedup factor: GRF-grad/GRF-FPT (forests)"
 subtitle_str <- 
   switch(MODEL_TYPE,
          "vcm" = "Varying coefficient model (VCM)",

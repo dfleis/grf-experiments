@@ -4,8 +4,8 @@ library(ggh4x)
 library(scales)
 library(pals)
 
-path <- "data/forest-mse-small/"
-basename_pattern <- "forest-mse-small-avg_mse-.*.csv"
+path <- "data/forest-mse/"
+basename_pattern <- "forest-mse-avg_mse-.*.csv"
 
 filenames <- list.files(path = path, pattern = basename_pattern, full.names = T)
 
@@ -83,11 +83,11 @@ null_labeller <- function() function(x) ""
 #----------------------------------------------------------------------
 #---------- DRAW PLOTS
 #----------------------------------------------------------------------
-MODEL_TYPE <- "vcm"
+MODEL_TYPE <- "hte"
 
-K_FILTER <- 4 # K = 4, 16
-n_FILTER <- c("1000", "4000") # n = 1000, 2000, 4000
-num.trees_FILTER <- c("100", "500") # num.trees = 100, 250, 500
+K_FILTER <- 256 # K = 4, 256
+n_FILTER <- c("10000", "20000", "100000") # n = 10000, 20000, 100000
+num.trees_FILTER <- c("100") # num.trees = 100
 
 df_plt <- df_init %>%
   filter(

@@ -4,8 +4,8 @@ library(ggh4x)
 library(scales)
 library(pals)
 
-path <- "data/forest-mse-small/"
-basename_pattern <- "forest-mse-small-avg_mse-.*.csv"
+path <- "data/bench-forest-small-FORK-1-15/"
+basename_pattern <- "bench-forest-small-FORK-1-15-TIME.*.csv"
 
 filenames <- list.files(path = path, pattern = basename_pattern, full.names = T)
 
@@ -17,9 +17,32 @@ df_init <- lapply(filenames, function(fnm) read.csv(fnm)) %>%
          K = as.factor(K),
          p = as.factor(p),
          n = as.factor(n),
-         num.trees = as.factor(nt),
-         setting_id = as.factor(setting_id)) %>%
-  select(-nt, -FUN, -effect_type, -prob_type)
+         num.trees = as.factor(num.trees),
+         setting_id = as.factor(setting_id))
+
+group_vars <- c("method", "model_type", "setting_id", "K", "p", "n", "num.trees")
+measure_vars <- "time"
+gc_vars <- c("gc", "gc0", "gc1", "gc2")
+
+#-------------------------------------------------------
+#----- Restructure data for ggplot
+#-------------------------------------------------------
+# Drop garbage collection indicator columns
+df_all <- df_init %>% select(-any_of(gc_vars))
+
+### Aggregate over bench iterations
+# Median aggregate over bench iterations (repeat timing done over the same data)
+# but keep the different replications (repeat timing done over new samples of the data).
+df_reps <- df_all %>%
+  group_by(across(all_of(c(group_vars, "rep")))) %>% 
+  summarise(across(all_of(measure_vars), median), .groups = "keep")
+
+### Aggregate over bench replications
+# Median aggregate over bench replications.
+df_summary <- df_reps %>%
+  group_by(across(all_of(group_vars))) %>% 
+  summarise(across(all_of(measure_vars), median), .groups = "keep")
+
 
 #----------------------------------------------------------------------
 #---------- PLOT CONFIG / HELPERS
@@ -36,9 +59,8 @@ MY_FONT_SIZE_AXIS_X <- 11
 MY_FONT_SIZE_AXIS_Y <- 9
 MY_COLORS <- MY_FILLS <- c("#f8766d", "#4390e8", "#4cd461") # reddish, blueish, greenish
 
-my_theme <- function(legend_position = "bottom") {
-  legend_position <- match.arg(legend_position, choices = c("none", "left", "right", "top", "bottom", "inside"))
-  thm <- theme(
+my_theme <- function(legend_position = "none") {
+  theme(
     strip.background = element_blank(),
     strip.text = element_text(size = MY_FONT_SIZE_STRIP),
     axis.ticks.x = element_line(color = "gray75", linewidth = 0.5),
@@ -53,43 +75,28 @@ my_theme <- function(legend_position = "bottom") {
     panel.grid.major.y = element_line(color = "gray95", linewidth = 0.25),
     panel.grid.major.x = element_line(color = "gray95", linewidth = 0.25),
     text = element_text(size = MY_FONT_SIZE, family = MY_FONT_FAMILY),
-    legend.position = legend_position
-  ) 
-  if (legend_position == "none") {
-    return (thm)
-  } else {
-    thm <- thm +
-      theme(
-        legend.key = element_rect(color = NA),
-        legend.key.width = unit(1, "lines"),
-        legend.margin = margin(0.15, 0.5, 0.15, 0.3, "lines"),
-        #legend.background = element_rect(linewidth = 0.5, color = "gray65"),
-        legend.text = element_text(
-          size = MY_FONT_SIZE_LEGEND, 
-          family = MY_FONT_FAMILY_MONO,
-          face = "bold"
-        )
-      )
-    return (thm)
-  }
+    legend.position = legend_position,
+    plot.title = element_text(size = MY_FONT_SIZE, 
+                              margin = margin(b = 0)),
+    plot.subtitle = element_text(size = MY_FONT_SIZE, 
+                                 margin = margin(b = -4)))
 }
-
 
 custom_labeller <- function(name = "", sep = " = ") {
   function(x) paste0(name, sep, x)
 }
-null_labeller <- function() function(x) ""
 
 #----------------------------------------------------------------------
 #---------- DRAW PLOTS
 #----------------------------------------------------------------------
 MODEL_TYPE <- "vcm"
+SETTING_ID <- 1
 
-K_FILTER <- 4 # K = 4, 16
+K_FILTER <- c(4, 16) # K = 4, 16
 n_FILTER <- c("1000", "4000") # n = 1000, 2000, 4000
 num.trees_FILTER <- c("100", "500") # num.trees = 100, 250, 500
 
-df_plt <- df_init %>%
+df_plt <- df_summary %>%
   filter(
     model_type == MODEL_TYPE,
     K %in% K_FILTER,
@@ -105,43 +112,28 @@ df_plt <- df_init %>%
   )
 
 #----- MODEL-SPECIFIC SETTINGS
-model_label <- switch(
-  MODEL_TYPE, 
-  "vcm" = "Varying coefficient model (VCM)", 
-  "hte" = "Heterogeneous treatment effects (HTE)"
-)
-title_str <- sprintf("MSE estimates: %s", model_label)
-subtitle_str <- paste0("50 model replications, 5000 test observations\nK = ", K_FILTER)
+model_label <- switch(MODEL_TYPE, 
+                      "vcm" = "VCM", 
+                      "hte" = "HTE")
+title_str <- sprintf("Median fit times: %s (forests)", model_label)
+subtitle_str <- sprintf("%s Setting %s", toupper(MODEL_TYPE), SETTING_ID)
 
-plt_mse <- df_plt %>%
-  mutate(avg_mse = 100 * avg_mse) %>%
-  ggplot(aes(x = method, y = avg_mse, fill = method)) + 
-  labs(x = "", y = expression(100%*%"MSE"), fill = "Method") + 
-  ggtitle(title_str, subtitle = subtitle_str) + 
-  geom_boxplot(alpha = 0.65, linewidth = 0.3, staplewidth = 0.25, outliers = F) +
-  #geom_boxplot(alpha = 0.65, linewidth = 0.3, staplewidth = 0.25, outlier.alpha = 0.2) + 
+#----- MAKE PLOTS (barplot)
+plt <- df_plt %>%
+  ggplot(aes(x = method, y = time, fill = method)) + 
+  geom_col(position = position_dodge(width = 0.8), width = 0.7) +
+  labs(x = "", y = "Fit time (seconds)", fill = "Method") +
+  ggtitle(title_str, subtitle = subtitle_str) +
   ggh4x::facet_nested(
-    vars(num.trees, n), vars(setting_id),  
-    scales = "free",
-    independent = "y",
-    axes = "x", remove_labels = "x",
+    num.trees + n ~ K, 
+    scales = "free",independent = "y", 
+    #nrow = 2,
     labeller = labeller(
-      setting_id = custom_labeller(sprintf("%s Setting", toupper(MODEL_TYPE)), " "),
-      n = custom_labeller("n", " = "),
-      num.trees = custom_labeller("nTrees", " = ")
-    ),
-    nest_line = element_line(color = "gray75")
-  ) +
-  scale_fill_manual(values = MY_COLORS) +
-  scale_color_manual(values = MY_COLORS) +
-  my_theme("none") 
-plt_mse
-
-
-
-
-
-
-
-
-
+      num.trees = custom_labeller(name = "nTrees", sep = " = "),
+      K = custom_labeller(name = "K", sep = " = "),
+      n = custom_labeller(name = "n", sep = " = ")),
+    nest_line = element_line(color = "gray75"),
+    strip = strip_nested(size = "variable")) + 
+  scale_fill_manual(values = MY_COLORS) + 
+  my_theme()
+plt

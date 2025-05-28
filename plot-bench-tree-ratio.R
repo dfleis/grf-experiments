@@ -133,10 +133,10 @@ my_labeller_p <- function(df, x, y) {
 #---------- DRAW PLOTS
 #----------------------------------------------------------------------
 MODEL_TYPE <- "vcm"
+
 STUMP <- c(TRUE, FALSE)
-K_FILTER <- c(4, 16, 64, 256)
-#n_FILTER <- c("10000", "20000", "100000", "200000")
-n_FILTER <- c("10000", "100000")
+K_FILTER <- c(4, 16, 64, 256) # K = 4, 16, 64, 256
+n_FILTER <- c("10000", "20000", "100000", "200000") # n = 10000, 20000, 100000, 200000
 
 df_plt <- df_ratio %>%
   filter(
@@ -156,7 +156,7 @@ df_plt <- df_ratio %>%
     stump2 = droplevels(stump2)
   )
 
-title_str <- "Fit time speedup factor: GRF-grad time/GRF-FPT time"
+title_str <- "Fit time speedup factor: GRF-grad/GRF-FPT (single split/single tree)"
 
 #----- MODEL-SPECIFIC SETTINGS
 my_ylim <- switch(MODEL_TYPE,
@@ -171,6 +171,7 @@ subtitle_str <-
   switch(MODEL_TYPE,
          "vcm" = "Varying coefficient model (VCM)",
          "hte" = "Heterogeneous treatment effects (HTE)")
+#subtitle_str <- paste0("Single split & single tree\n", subtitle_str)
 legend_str <- sprintf("%s\nSetting", toupper(MODEL_TYPE))
 
 #----- MAKE PLOTS (barplot)
