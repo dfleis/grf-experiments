@@ -1,4 +1,4 @@
-# Build Instructions
+# Build Instructions for `grf`
 
 ## Unix-based systems
 
