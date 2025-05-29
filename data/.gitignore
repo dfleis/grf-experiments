@@ -2,5 +2,12 @@
 .Rproj.user
 .Rhistory
 
-*.csv
+# ignore any CSV whose name contains `-dim_mse-` 
+# these files are very large and were not used in the manuscript
+*-dim_mse-*.csv
+
+# ignore any CSV whose name contains `-nsplits-`
+# these files are very large and were not used in the manuscript
+*-nsplits-*.csv
+
 *.rdata
