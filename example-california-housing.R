@@ -33,6 +33,7 @@
 #
 # Generated 2025-Jan-06 23:05 EST
 ###################################################################################################################
+set.seed(1)
 library(tidyverse)
 library(GGally)
 library(bench)
@@ -355,7 +356,9 @@ my_ggsave(plt_preds, filename, path = PLOT_PATH, width = 7, height = 6.5)
 #-------------------------------------------------------
 #----- EXTRA FIGURES: DISTRIBUTION OF THE TRAINING DATA 
 #-------------------------------------------------------
-plt_W <- data.frame(W[1:2000,]) %>%
+set.seed(1)
+W.plot.idx <- sample(nrow(W), 2000, replace = F)
+plt_W <- data.frame(W[W.plot.idx,]) %>%
   rename(!!!setNames(names(W_labs), W_labs)) %>%
   ggpairs(title = "California housing data: Regressor distribution",
           labeller = label_wrap_gen(14),
