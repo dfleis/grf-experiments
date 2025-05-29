@@ -75,10 +75,10 @@ MY_FONT_FAMILY_MONO <- "mono"
 
 MY_FONT_SIZE <- 11
 MY_FONT_SIZE_STRIP_X <- 12
-MY_FONT_SIZE_STRIP_Y <- 10
+MY_FONT_SIZE_STRIP_Y <- 9
 MY_FONT_SIZE_LEGEND <- 10
-MY_FONT_SIZE_LABEL <- 9
-MY_FONT_SIZE_AXIS <- 10
+MY_FONT_SIZE_LABEL <- 7
+MY_FONT_SIZE_AXIS <- 9
 MY_COLORS <- scales::hue_pal()(5) # number of settings
 
 my_theme <- function() {
@@ -89,7 +89,8 @@ my_theme <- function() {
     axis.ticks.x = element_line(color = "gray75", linewidth = 0.5),
     axis.ticks.y = element_blank(),
     axis.ticks.length = unit(-0.1, "cm"),
-    axis.text = element_text(family = MY_FONT_FAMILY, size = MY_FONT_SIZE_AXIS),
+    axis.text.x = element_text(family = MY_FONT_FAMILY, size = MY_FONT_SIZE_AXIS_X),
+    axis.text.y = element_text(family = MY_FONT_FAMILY, size = MY_FONT_SIZE_AXIS_Y),
     axis.line.y = element_line(color = "gray90", linewidth = 0.5),
     panel.background = element_rect(fill = NA),
     panel.border = element_rect(color = "gray75", fill = NA),
@@ -133,7 +134,7 @@ my_labeller_p <- function(df, x, y) {
 #----------------------------------------------------------------------
 #---------- DRAW PLOTS
 #----------------------------------------------------------------------
-MODEL_TYPE <- "hte"
+MODEL_TYPE <- "vcm"
 
 K_FILTER <- c(4, 16) # K = 4, 16
 n_FILTER <- c("1000", "4000") # n = 1000, 2000, 4000
@@ -198,13 +199,5 @@ plt_bar <- df_plt_adjusted %>%
   my_theme()
 plt_bar
 
-
-
-
-
-# 
-# #filename_plt_line <- sprintf("figures/forest-timing-ratio-%s-line.png", MODEL_TYPE)
-# filename_plt_bar <- sprintf("figures/forest-timing-ratio-%s-bar.png", MODEL_TYPE)
-# 
-# #ggsave(filename_plt_line, plot = plt_line, width = 6, height = 7)
-# ggsave(filename_plt_bar, plot = plt_bar, width = 7, height = 4.5)
+filename_plt_bar <- sprintf("figures/forest/bench-forest-ratio-small-%s.pdf", MODEL_TYPE)
+ggsave(filename_plt_bar, plot = plt_bar, width = 5.5, height = 4.5)

@@ -29,11 +29,11 @@ df_init <- lapply(filenames, function(fnm) read.csv(fnm)) %>%
 MY_FONT_FAMILY <- "sans"
 MY_FONT_FAMILY_MONO <- "mono"
 
-MY_FONT_SIZE <- 11
-MY_FONT_SIZE_STRIP <- 10
+MY_FONT_SIZE <- 9
+MY_FONT_SIZE_STRIP <- 8
 MY_FONT_SIZE_LEGEND <- 12
-MY_FONT_SIZE_AXIS_X <- 11
-MY_FONT_SIZE_AXIS_Y <- 9
+MY_FONT_SIZE_AXIS_X <- 8
+MY_FONT_SIZE_AXIS_Y <- 7
 MY_COLORS <- MY_FILLS <- c("#f8766d", "#4390e8", "#4cd461") # reddish, blueish, greenish
 
 my_theme <- function(legend_position = "bottom") {
@@ -43,7 +43,7 @@ my_theme <- function(legend_position = "bottom") {
     strip.text = element_text(size = MY_FONT_SIZE_STRIP),
     axis.ticks.x = element_line(color = "gray75", linewidth = 0.5),
     axis.ticks.y = element_blank(),
-    axis.ticks.length = unit(-0.1, "cm"),
+    axis.ticks.length = unit(-0.05, "cm"),
     axis.text = element_text(family = MY_FONT_FAMILY),
     axis.text.x = element_text(size = MY_FONT_SIZE_AXIS_X, family = MY_FONT_FAMILY_MONO, face = "bold"),
     axis.text.y = element_text(size = MY_FONT_SIZE_AXIS_Y),
@@ -83,9 +83,9 @@ null_labeller <- function() function(x) ""
 #----------------------------------------------------------------------
 #---------- DRAW PLOTS
 #----------------------------------------------------------------------
-MODEL_TYPE <- "vcm"
+MODEL_TYPE <- "hte"
+K_FILTER <- 16 # K = 4, 16
 
-K_FILTER <- 4 # K = 4, 16
 n_FILTER <- c("1000", "4000") # n = 1000, 2000, 4000
 num.trees_FILTER <- c("100", "500") # num.trees = 100, 250, 500
 
@@ -116,7 +116,7 @@ subtitle_str <- paste0("50 model replications, 5000 test observations\nK = ", K_
 plt_mse <- df_plt %>%
   mutate(avg_mse = 100 * avg_mse) %>%
   ggplot(aes(x = method, y = avg_mse, fill = method)) + 
-  labs(x = "", y = expression(100%*%"MSE"), fill = "Method") + 
+  labs(x = "Method", y = expression(100%*%"MSE"), fill = "Method") + 
   ggtitle(title_str, subtitle = subtitle_str) + 
   geom_boxplot(alpha = 0.65, linewidth = 0.3, staplewidth = 0.25, outliers = F) +
   #geom_boxplot(alpha = 0.65, linewidth = 0.3, staplewidth = 0.25, outlier.alpha = 0.2) + 
@@ -138,6 +138,8 @@ plt_mse <- df_plt %>%
 plt_mse
 
 
+filename_plt <- sprintf("figures/forest/mse-small-%s-K%s.pdf", MODEL_TYPE, K_FILTER)
+ggsave(filename_plt, plot = plt_mse, width = 7, height = 4.5)
 
 
 

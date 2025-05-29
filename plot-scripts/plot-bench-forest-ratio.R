@@ -75,10 +75,10 @@ MY_FONT_FAMILY_MONO <- "mono"
 
 MY_FONT_SIZE <- 11
 MY_FONT_SIZE_STRIP_X <- 12
-MY_FONT_SIZE_STRIP_Y <- 10
+MY_FONT_SIZE_STRIP_Y <- 9
 MY_FONT_SIZE_LEGEND <- 10
-MY_FONT_SIZE_LABEL <- 9
-MY_FONT_SIZE_AXIS <- 10
+MY_FONT_SIZE_LABEL <- 7
+MY_FONT_SIZE_AXIS <- 9
 MY_COLORS <- scales::hue_pal()(5) # number of settings
 
 my_theme <- function() {
@@ -159,7 +159,7 @@ my_ylim <- switch(MODEL_TYPE,
                   "hte" = c(0.95, 1.65))
 my_breaks <- pretty(seq(min(my_ylim), max(my_ylim), length.out = 5))
 
-my_label_p_ypos <- switch(MODEL_TYPE, "vcm" = 0.8, "hte" = 0.95)
+my_label_p_ypos <- switch(MODEL_TYPE, "vcm" = 3.6, "hte" = 1.62)
 my_model_colors <- switch(MODEL_TYPE, "vcm" = MY_COLORS[1:4], "hte" = MY_COLORS)
 
 title_str <- "Fit time speedup factor: GRF-grad/GRF-FPT (forests)"
@@ -197,4 +197,5 @@ plt_bar <- df_plt_adjusted %>%
   my_theme()
 plt_bar
 
-
+filename_plt_bar <- sprintf("figures/forest/bench-forest-ratio-%s.pdf", MODEL_TYPE)
+ggsave(filename_plt_bar, plot = plt_bar, width = 5.5, height = 4.5)

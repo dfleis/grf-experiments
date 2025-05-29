@@ -284,7 +284,7 @@ if (MAKE_INSAMPLE_PREDS) subtitle <- paste0(subtitle, " (in-sample predictions)"
 plot_xlim <- range(df_preds_long$lon)
 plot_ylim <- range(df_preds_long$lat)
 plot_colorlim <- range(df_preds_long$value)
-
+plot_colorlim <- c(-max(abs(plot_colorlim)), max(abs(plot_colorlim)))
 df_plot <- df_preds_long %>%
   filter(method == METHOD_TO_PLOT)# %>%
   #filter(effect %in% c("tot_rooms", "tot_beds", "med_age", "med_income"))
@@ -292,10 +292,10 @@ df_plot <- df_preds_long %>%
 point_shape <- ifelse(MAKE_INSAMPLE_PREDS, 16, 15)
 point_size <- ifelse(MAKE_INSAMPLE_PREDS, 0.4, 0.2)
  
-POINT_COLOR_LOW <- "#00BFC4"
-POINT_COLOR_HIGH <- "#F8766D"
+# POINT_COLOR_LOW <- "#00BFC4"
+# POINT_COLOR_HIGH <- "#F8766D"
 
-color_transition_factor <- 1
+color_transition_factor <- 1.5
 color_pal <- function(n = 100) {
   # apply a tanh transformation to make the color gradient change more rapidly near zero
   vals <- seq(-1, 1, length.out = n)
@@ -304,7 +304,9 @@ color_pal <- function(n = 100) {
   vals_normalized <- (vals_transformed - min(vals_transformed)) / 
     (max(vals_transformed) - min(vals_transformed))
   # create color palette
-  colorRamp(colors = c(POINT_COLOR_LOW, "white", POINT_COLOR_HIGH))(vals_normalized)
+  #colorRamp(colors = c(POINT_COLOR_LOW, "white", POINT_COLOR_HIGH))(vals_normalized)
+  colorRamp(colors = rev(pals::brewer.spectral(n)))(vals_normalized)
+  colorRamp(colors = rev(pals::brewer.rdylbu(n)))(vals_normalized)
 }
 
 plt_preds <- ggplot() +
@@ -353,19 +355,19 @@ my_ggsave(plt_preds, filename, path = PLOT_PATH, width = 7, height = 6.5)
 #-------------------------------------------------------
 #----- EXTRA FIGURES: DISTRIBUTION OF THE TRAINING DATA 
 #-------------------------------------------------------
-plt_W <- data.frame(W) %>%
+plt_W <- data.frame(W[1:2000,]) %>%
   rename(!!!setNames(names(W_labs), W_labs)) %>%
   ggpairs(title = "California housing data: Regressor distribution",
           labeller = label_wrap_gen(14),
-          lower = list(continuous = wrap("points", alpha = 0.05, size = 0.1)),
-          diag = list(continuous = wrap("barDiag", bins = 20, 
-                                        fill = "gray90", color = "black")), 
+          lower = list(continuous = wrap("points", alpha = 0.15, size = 0.1)),
+          diag = list(continuous = wrap("barDiag", bins = 12, 
+                                        fill = "gray95", color = "black")), 
           upper = list(continuous = wrap("cor", align_percent = 0.5,
                                          size = 3, stars = F))) +
   theme_minimal() + 
   theme(panel.grid = element_blank(),
         panel.border = element_rect(color = "black", fill = NA), 
-        strip.text = element_text(size = 7, face = "bold"),
+        strip.text = element_text(size = 8, face = "bold"),
         axis.text = element_text(size = 7),
         axis.ticks.length = unit(-0.1, "cm"),
         axis.ticks = element_line())
@@ -377,36 +379,36 @@ my_ggsave(plt_W, "grf-california-housing-regressor-distribution",
 sapply(forests, `[[`, "time")
 
 
-#-------------------------------------------------------
-#----- TIME TESTS
-#-------------------------------------------------------
-seed <- 1
-num.threads <- NULL
-methods <- c("grad", "fpt1", "fpt2")
-num.trees <- 2000
-min.node.size <- 5
-
-library(bench)
-
-t0 <- Sys.time()
-bp <- bench::press(
-  method = methods,
-  {
-    bench::mark(
-      lm_forest(X = X, Y = Y, W = W, 
-                num.trees = num.trees, 
-                min.node.size = min.node.size, 
-                method = method, 
-                seed = seed, 
-                num.threads = num.threads),
-      iterations = 10,
-      filter_gc = FALSE # large forests appear to almost always trigger GC
-    )
-  }
-)
-t1 <- Sys.time()
-difftime(t1, t0)
-
-bp
-knitr::kable(bp %>% select(method, median))
+# #-------------------------------------------------------
+# #----- TIME TESTS
+# #-------------------------------------------------------
+# seed <- 1
+# num.threads <- NULL
+# methods <- c("grad", "fpt1", "fpt2")
+# num.trees <- 2000
+# min.node.size <- 5
+# 
+# library(bench)
+# 
+# t0 <- Sys.time()
+# bp <- bench::press(
+#   method = methods,
+#   {
+#     bench::mark(
+#       lm_forest(X = X, Y = Y, W = W, 
+#                 num.trees = num.trees, 
+#                 min.node.size = min.node.size, 
+#                 method = method, 
+#                 seed = seed, 
+#                 num.threads = num.threads),
+#       iterations = 10,
+#       filter_gc = FALSE # large forests appear to almost always trigger GC
+#     )
+#   }
+# )
+# t1 <- Sys.time()
+# difftime(t1, t0)
+# 
+# bp
+# knitr::kable(bp %>% select(method, median))
 

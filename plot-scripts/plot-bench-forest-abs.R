@@ -53,10 +53,10 @@ MY_FONT_FAMILY <- "sans"
 MY_FONT_FAMILY_MONO <- "mono"
 
 MY_FONT_SIZE <- 11
-MY_FONT_SIZE_STRIP <- 10
+MY_FONT_SIZE_STRIP <- 8
 MY_FONT_SIZE_LEGEND <- 12
-MY_FONT_SIZE_AXIS_X <- 11
-MY_FONT_SIZE_AXIS_Y <- 9
+MY_FONT_SIZE_AXIS_X <- 8
+MY_FONT_SIZE_AXIS_Y <- 7
 MY_COLORS <- MY_FILLS <- c("#f8766d", "#4390e8", "#4cd461") # reddish, blueish, greenish
 
 my_theme <- function(legend_position = "none") {
@@ -65,7 +65,7 @@ my_theme <- function(legend_position = "none") {
     strip.text = element_text(size = MY_FONT_SIZE_STRIP),
     axis.ticks.x = element_line(color = "gray75", linewidth = 0.5),
     axis.ticks.y = element_blank(),
-    axis.ticks.length = unit(-0.1, "cm"),
+    axis.ticks.length = unit(-0.05, "cm"),
     axis.text = element_text(family = MY_FONT_FAMILY),
     axis.text.x = element_text(size = MY_FONT_SIZE_AXIS_X, family = MY_FONT_FAMILY_MONO, face = "bold"),
     axis.text.y = element_text(size = MY_FONT_SIZE_AXIS_Y),
@@ -90,7 +90,7 @@ custom_labeller <- function(name = "", sep = " = ") {
 #---------- DRAW PLOTS
 #----------------------------------------------------------------------
 MODEL_TYPE <- "vcm"
-SETTING_ID <- 3
+SETTING_ID <- 4
 
 K_FILTER <- c(4, 16, 64, 256) # K = 4, 16, 64, 256
 n_FILTER <- c("10000", "20000", "100000") # n = 100000, 20000, 100000
@@ -123,7 +123,7 @@ subtitle_str <- sprintf("%s Setting %s", toupper(MODEL_TYPE), SETTING_ID)
 plt <- df_plt %>%
   ggplot(aes(x = method, y = time, fill = method)) + 
   geom_col(position = position_dodge(width = 0.8), width = 0.7) +
-  labs(x = "", y = "Fit time (seconds)", fill = "Method") +
+  labs(x = "Method", y = "Fit time (seconds)", fill = "Method") +
   ggtitle(title_str, subtitle = subtitle_str) +
   ggh4x::facet_nested(
     num.trees + n ~ K, 
@@ -138,3 +138,6 @@ plt <- df_plt %>%
   scale_fill_manual(values = MY_COLORS) + 
   my_theme()
 plt
+
+filename_plt <- sprintf("figures/forest/bench-forest-abs-%s-%s.pdf", MODEL_TYPE, SETTING_ID)
+ggsave(filename_plt, plot = plt, width = 5.5, height = 3)

@@ -72,12 +72,13 @@ df_ratio <- df_summary %>%
 MY_FONT_FAMILY <- "sans"
 MY_FONT_FAMILY_MONO <- "mono"
 
-MY_FONT_SIZE <- 11
-MY_FONT_SIZE_STRIP_X <- 12
-MY_FONT_SIZE_STRIP_Y <- 10
-MY_FONT_SIZE_LEGEND <- 10
-MY_FONT_SIZE_LABEL <- 9
-MY_FONT_SIZE_AXIS <- 10
+MY_FONT_SIZE <- 7.5
+MY_FONT_SIZE_STRIP_X <- 8
+MY_FONT_SIZE_STRIP_Y <- 8
+MY_FONT_SIZE_LEGEND <- 8
+MY_FONT_SIZE_LABEL <- 7
+MY_FONT_SIZE_AXIS_X <- 9
+MY_FONT_SIZE_AXIS_Y <- 8
 MY_COLORS <- scales::hue_pal()(5) # number of settings
 
 my_theme <- function() {
@@ -87,8 +88,9 @@ my_theme <- function() {
     strip.text.y = element_text(size = MY_FONT_SIZE_STRIP_Y),
     axis.ticks.x = element_line(color = "gray75", linewidth = 0.5),
     axis.ticks.y = element_blank(),
-    axis.ticks.length = unit(-0.1, "cm"),
-    axis.text = element_text(family = MY_FONT_FAMILY, size = MY_FONT_SIZE_AXIS),
+    axis.ticks.length = unit(-0.05, "cm"),
+    axis.text.x = element_text(family = MY_FONT_FAMILY, size = MY_FONT_SIZE_AXIS_X),
+    axis.text.y = element_text(family = MY_FONT_FAMILY, size = MY_FONT_SIZE_AXIS_Y),
     axis.line.y = element_line(color = "gray90", linewidth = 0.5),
     panel.background = element_rect(fill = NA),
     panel.border = element_rect(color = "gray75", fill = NA),
@@ -132,11 +134,11 @@ my_labeller_p <- function(df, x, y) {
 #----------------------------------------------------------------------
 #---------- DRAW PLOTS
 #----------------------------------------------------------------------
-MODEL_TYPE <- "vcm"
+MODEL_TYPE <- "hte"
 
 STUMP <- c(TRUE, FALSE)
 K_FILTER <- c(4, 16, 64, 256) # K = 4, 16, 64, 256
-n_FILTER <- c("10000", "20000", "100000", "200000") # n = 10000, 20000, 100000, 200000
+n_FILTER <- c("10000", "20000", "100000") # n = 10000, 20000, 100000, 200000
 
 df_plt <- df_ratio %>%
   filter(
@@ -164,7 +166,7 @@ my_ylim <- switch(MODEL_TYPE,
                   "hte" = c(0.5, 5.0))
 my_breaks <- pretty(seq(min(my_ylim), max(my_ylim), length.out = 5))
 
-my_label_p_ypos <- switch(MODEL_TYPE, "vcm" = 0.75, "hte" = 0.6)
+my_label_p_ypos <- switch(MODEL_TYPE, "vcm" = 3.4, "hte" = 4.75)
 my_model_colors <- switch(MODEL_TYPE, "vcm" = MY_COLORS[1:4], "hte" = MY_COLORS)
 
 subtitle_str <- 
@@ -201,3 +203,6 @@ plt_bar <- df_plt_adjusted %>%
   my_labeller_p(df_plt, y = my_label_p_ypos - 1) +
   my_theme()
 plt_bar
+
+filename_plt_bar <- sprintf("figures/tree/bench-tree-ratio-%s.pdf", MODEL_TYPE)
+ggsave(filename_plt_bar, plot = plt_bar, width = 4.5, height = 6.5)
