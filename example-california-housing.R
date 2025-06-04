@@ -229,7 +229,7 @@ cat(sprintf("%s :: Making predictions :: in-sample predictions = %s\n",
 ### Part 2: Make predictions at X values
 df_preds_list <- sapply(forests, function(ff) {
   if (MAKE_INSAMPLE_PREDS) {
-    Xnew <- X  
+    Xnew <- X
     preds <- predict(ff$forest, estimate.variance = TRUE)
     pp <- preds$predictions[,,1] 
     #pp <- preds$variance.estimates
@@ -291,7 +291,7 @@ df_plot <- df_preds_long %>%
   #filter(effect %in% c("tot_rooms", "tot_beds", "med_age", "med_income"))
 
 point_shape <- ifelse(MAKE_INSAMPLE_PREDS, 16, 15)
-point_size <- ifelse(MAKE_INSAMPLE_PREDS, 0.4, 0.2)
+point_size <- ifelse(MAKE_INSAMPLE_PREDS, 0.2, 0.1)
  
 # POINT_COLOR_LOW <- "#00BFC4"
 # POINT_COLOR_HIGH <- "#F8766D"
@@ -334,7 +334,9 @@ plt_preds <- ggplot() +
                        limits = plot_colorlim) +
   theme_minimal() + 
   theme(panel.grid = element_blank(), 
-        strip.text = element_text(size = 10, face = "bold", margin = margin(b = 1)),
+        plot.title = element_text(size = 11),
+        plot.subtitle = element_text(size = 9),
+        strip.text = element_text(size = 8, face = "bold", margin = margin(b = 1)),
         axis.text = element_blank(), 
         legend.position = "inside",
         #legend.title.align = 0.5,
@@ -362,18 +364,21 @@ plt_W <- data.frame(W[W.plot.idx,]) %>%
   rename(!!!setNames(names(W_labs), W_labs)) %>%
   ggpairs(title = "California housing data: Regressor distribution",
           labeller = label_wrap_gen(14),
-          lower = list(continuous = wrap("points", alpha = 0.15, size = 0.1)),
-          diag = list(continuous = wrap("barDiag", bins = 12, 
-                                        fill = "gray95", color = "black")), 
-          upper = list(continuous = wrap("cor", align_percent = 0.5,
-                                         size = 3, stars = F))) +
+          lower = list(continuous = wrap("points", 
+                                         shape = 16, stroke = 0, alpha = 0.25, size = 0.65)),
+          diag = list(continuous = wrap("barDiag",
+                                        bins = 15, fill = "gray95", color = "black")), 
+          upper = list(continuous = wrap("cor", 
+                                         align_percent = 0.5, size = 3, stars = F))) +
   theme_minimal() + 
   theme(panel.grid = element_blank(),
         panel.border = element_rect(color = "black", fill = NA), 
+        plot.title = element_text(size = 11),
         strip.text = element_text(size = 8, face = "bold"),
-        axis.text = element_text(size = 7),
-        axis.ticks.length = unit(-0.1, "cm"),
-        axis.ticks = element_line())
+        axis.text = element_text(size = 6, color = "gray50"),
+        axis.ticks.length = unit(-0.06, "cm"),
+        axis.ticks = element_line(linewidth = 0.4)
+  )
 
 my_ggsave(plt_W, "grf-california-housing-regressor-distribution", 
           path = PLOT_PATH, width = 6, height = 6.2)
